@@ -7,9 +7,9 @@
 
 lv_obj_t * ui_PorukeScreen = NULL;
 lv_obj_t * ui_Keyboard1 = NULL;
-lv_obj_t * ui_ImgButton16 = NULL;
+lv_obj_t * ui_BackButtonMsg = NULL;
 // event funtions
-void ui_event_ImgButton16(lv_event_t * e)
+void ui_event_BackButtonMsg(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -32,15 +32,15 @@ void ui_PorukeScreen_screen_init(void)
     lv_obj_set_y(ui_Keyboard1, 55);
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
 
-    ui_ImgButton16 = lv_imgbtn_create(ui_PorukeScreen);
-    lv_imgbtn_set_src(ui_ImgButton16, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
-    lv_obj_set_width(ui_ImgButton16, 30);
-    lv_obj_set_height(ui_ImgButton16, 30);
-    lv_obj_set_x(ui_ImgButton16, -140);
-    lv_obj_set_y(ui_ImgButton16, -100);
-    lv_obj_set_align(ui_ImgButton16, LV_ALIGN_CENTER);
+    ui_BackButtonMsg = lv_imgbtn_create(ui_PorukeScreen);
+    lv_imgbtn_set_src(ui_BackButtonMsg, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
+    lv_obj_set_width(ui_BackButtonMsg, 30);
+    lv_obj_set_height(ui_BackButtonMsg, 30);
+    lv_obj_set_x(ui_BackButtonMsg, -140);
+    lv_obj_set_y(ui_BackButtonMsg, -100);
+    lv_obj_set_align(ui_BackButtonMsg, LV_ALIGN_CENTER);
 
-    lv_obj_add_event_cb(ui_ImgButton16, ui_event_ImgButton16, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_BackButtonMsg, ui_event_BackButtonMsg, LV_EVENT_ALL, NULL);
 
 }
 
@@ -51,6 +51,6 @@ void ui_PorukeScreen_screen_destroy(void)
     // NULL screen variables
     ui_PorukeScreen = NULL;
     ui_Keyboard1 = NULL;
-    ui_ImgButton16 = NULL;
+    ui_BackButtonMsg = NULL;
 
 }

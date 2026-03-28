@@ -42,6 +42,7 @@ static int               s_sd_gpio = -1;
 static uint32_t          s_sample_rate   = MAX98357A_SAMPLE_RATE;
 static uint8_t           s_bits_per_sample = MAX98357A_BITS_PER_SAMPLE;
 static bool              s_initialised   = false;
+static volatile bool     s_stop_requested = false;
 
 //---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
 static void _sd_mode_gpio_init(int gpio_num);
@@ -174,6 +175,8 @@ esp_err_t max98357a_play_raw(const void *data, size_t len_bytes,
 
     while(remaining > 0U)
     {
+        if(s_stop_requested) { return ESP_ERR_INVALID_STATE; }
+
         size_t chunk = (remaining > WRITE_CHUNK_BYTES) ? WRITE_CHUNK_BYTES
                                                        : remaining;
         esp_err_t ret = i2s_channel_write(s_tx_chan, p, chunk, &written,
@@ -292,6 +295,30 @@ static void _sd_mode_gpio_init(int gpio_num)
     };
     gpio_config(&io_conf);
     gpio_set_level((gpio_num_t)gpio_num, 0); /* start disabled */
+}
+
+void max98357a_stop_playback(void)
+{
+    if(!s_initialised || !s_tx_chan) return;
+
+    /* Signal any ongoing play_raw to abort at the next chunk boundary */
+    s_stop_requested = true;
+
+    /* Disable the I2S channel immediately — cuts audio output and stops
+     * the DMA from looping the last buffer.
+     * Re-enable so the channel is ready for the next sound. */
+    i2s_channel_disable(s_tx_chan);
+    i2s_channel_enable(s_tx_chan);
+
+    /* NOTE: s_stop_requested is left TRUE here.
+     * Callers must call max98357a_resume_playback() before starting
+     * new audio.  This prevents any still-running task from sneaking
+     * a write through the freshly re-enabled channel. */
+}
+
+void max98357a_resume_playback(void)
+{
+    s_stop_requested = false;
 }
 
 void play_sos(void)

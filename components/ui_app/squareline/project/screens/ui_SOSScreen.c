@@ -26,7 +26,7 @@ void ui_SOSScreen_screen_init(void)
     lv_obj_clear_flag(ui_SOSScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_GumbSOS = lv_imgbtn_create(ui_SOSScreen);
-    lv_imgbtn_set_src(ui_GumbSOS, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_sos_icon_120x120_png, NULL);
+    lv_imgbtn_set_src(ui_GumbSOS, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_sos_120x120_png, NULL);
     lv_obj_set_width(ui_GumbSOS, 120);
     lv_obj_set_height(ui_GumbSOS, 120);
     lv_obj_set_x(ui_GumbSOS, -9);
