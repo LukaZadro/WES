@@ -5,6 +5,7 @@
 #include "buttons.h"
 #include "joystick.h"
 #include "ui.h"
+#include "ui_events.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -38,7 +39,7 @@ static void _toggle_switch_cb(void *arg)
 
     if (lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED)) {
         lv_obj_clear_state(ui_ColorSwitch, LV_STATE_CHECKED);
-        plava_boja(NULL);
+        is_blue_mode(NULL);
     } else {
         lv_obj_add_state(ui_ColorSwitch, LV_STATE_CHECKED);
         roza_boja(NULL);
@@ -47,7 +48,7 @@ static void _toggle_switch_cb(void *arg)
 
 static void _go_poruke_cb(void *arg)
 {
-    _ui_screen_change(&ui_Poruke1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Poruke1_screen_init);
+    _ui_screen_change(&ui_PorukeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_PorukeScreen_screen_init);
 }
 
 static void _button_task(void *arg)
@@ -100,16 +101,7 @@ static void _sound_task(void *arg)
         .bits_per_sample = 16,
     };
     max98357a_init(&cfg);
-    /* write 500ms of true silence (zeros) between loops */
-    static const int16_t silence[512] = {0};
-    uint32_t silence_loops = (44100 * 500 / 1000) / (sizeof(silence) / 4);
-
-    while(1)
-    {
-        play_tetris();
-        for(uint32_t i = 0; i < silence_loops; i++)
-            max98357a_play_raw(silence, sizeof(silence), 1000);
-    }
+    vTaskDelete(NULL);
 }
 
 void app_main(void)
