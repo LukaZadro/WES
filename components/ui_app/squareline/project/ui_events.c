@@ -64,7 +64,7 @@ static void _tetris_task(void *arg)
 
     while (_tetris_running)
     {
-        //play_tetris();          /* internally aborts quickly when stop flag set */
+        play_tetris();          /* internally aborts quickly when stop flag set */
 
         if (!_tetris_running) break;
 
