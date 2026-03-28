@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "nav.h"
 #include "max98357a.h"
 #include "wifi_station.h"
 #include "mqtt_client_bl.h"
@@ -46,11 +47,6 @@ static void _toggle_switch_cb(void *arg)
     }
 }
 
-static void _go_poruke_cb(void *arg)
-{
-    _ui_screen_change(&ui_PorukeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_PorukeScreen_screen_init);
-}
-
 static void _button_task(void *arg)
 {
     btn_event_t evt;
@@ -58,21 +54,25 @@ static void _button_task(void *arg)
     {
         if (xQueueReceive(_btn_queue, &evt, portMAX_DELAY))
         {
-            if (!evt.pressed) continue;
-
-            ESP_LOGI(TAG, "%s PRESSED", _btn_names[evt.id]);
+            ESP_LOGI(TAG, "%s %s", _btn_names[evt.id],
+                     evt.pressed ? "PRESSED" : "RELEASED");
 
             switch (evt.id)
             {
                 case BUTTON_1:
-                    lv_async_call(_toggle_switch_cb, NULL);
+                    if (evt.pressed) lv_async_call(_toggle_switch_cb, NULL);
                     break;
                 case BUTTON_2:
-                    lv_async_call(_go_poruke_cb, NULL);
+                    /* Back button — navigate to the previous screen */
+                    if (evt.pressed) nav_go_back();
                     break;
                 case BUTTON_3:
                     break;
                 case BUTTON_4:
+                    /* Select / Enter — press or release the focused widget */
+                    nav_send_key(LV_KEY_ENTER,
+                                 evt.pressed ? LV_INDEV_STATE_PR
+                                             : LV_INDEV_STATE_REL);
                     break;
                 default:
                     break;
@@ -81,9 +81,38 @@ static void _button_task(void *arg)
     }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Joystick → LVGL navigation keys                                    */
+/*                                                                     */
+/*  Joystick range: -100 … +100 on each axis.                         */
+/*  Dominant axis beyond ±JOY_THRESHOLD drives NEXT / PREV focus.     */
+/* ------------------------------------------------------------------ */
+#define JOY_THRESHOLD 30
+
 static void _joystick_event_cb(joystick_pos_t pos)
 {
-    ESP_LOGI(TAG, "JOY  X: %4d  Y: %4d", pos.x, pos.y);
+    static uint32_t prev_key = 0;
+
+    int16_t ax = pos.x < 0 ? -pos.x : pos.x;
+    int16_t ay = pos.y < 0 ? -pos.y : pos.y;
+
+    uint32_t key = 0;
+
+    if (ax > ay) {
+        /* X axis dominates */
+        if      (pos.x >  JOY_THRESHOLD) key = LV_KEY_NEXT;
+        else if (pos.x < -JOY_THRESHOLD) key = LV_KEY_PREV;
+    } else {
+        /* Y axis dominates */
+        if      (pos.y >  JOY_THRESHOLD) key = LV_KEY_NEXT;
+        else if (pos.y < -JOY_THRESHOLD) key = LV_KEY_PREV;
+    }
+
+    if (key != prev_key) {
+        if (prev_key != 0) nav_send_key(prev_key, LV_INDEV_STATE_REL);
+        if (key      != 0) nav_send_key(key,      LV_INDEV_STATE_PR);
+        prev_key = key;
+    }
 }
 
 /* ------------------------------------------------------------------ */
