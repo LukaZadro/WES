@@ -3,19 +3,22 @@
 // LVGL version: 8.3.6
 // Project name: esp32_gui
 
-#ifndef _UI_EVENTS_H
-#define _UI_EVENTS_H
+#ifndef UI_SOSSCREEN_H
+#define UI_SOSSCREEN_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void is_blue_mode(lv_event_t * e);
-void roza_boja(lv_event_t * e);
-void tetris_music_on(lv_event_t * e);
+// SCREEN: ui_SOSScreen
+extern void ui_SOSScreen_screen_init(void);
+extern void ui_SOSScreen_screen_destroy(void);
+extern lv_obj_t * ui_SOSScreen;
+// CUSTOM VARIABLES
 
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
 
 #endif
+

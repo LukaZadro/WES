@@ -19,8 +19,11 @@ extern "C" {
 ///////////////////// SCREENS ////////////////////
 
 #include "screens/ui_HomePage.h"
-#include "screens/ui_PorukeScreen.h"
 #include "screens/ui_TetrisScreen.h"
+#include "screens/ui_MemoryScreen.h"
+#include "screens/ui_SOSScreen.h"
+#include "screens/ui_PorukeScreen.h"
+#include "screens/ui_KlavijaturaScreen.h"
 
 ///////////////////// VARIABLES ////////////////////
 

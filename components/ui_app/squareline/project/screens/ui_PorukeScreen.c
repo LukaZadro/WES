@@ -7,7 +7,6 @@
 
 lv_obj_t * ui_PorukeScreen = NULL;
 lv_obj_t * ui_Keyboard1 = NULL;
-lv_obj_t * ui_NazadButton = NULL;
 // event funtions
 
 // build funtions
@@ -24,13 +23,6 @@ void ui_PorukeScreen_screen_init(void)
     lv_obj_set_y(ui_Keyboard1, 55);
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
 
-    ui_NazadButton = lv_imgbtn_create(ui_PorukeScreen);
-    lv_obj_set_width(ui_NazadButton, 64);
-    lv_obj_set_height(ui_NazadButton, 64);
-    lv_obj_set_x(ui_NazadButton, -128);
-    lv_obj_set_y(ui_NazadButton, -93);
-    lv_obj_set_align(ui_NazadButton, LV_ALIGN_CENTER);
-
 }
 
 void ui_PorukeScreen_screen_destroy(void)
@@ -40,6 +32,5 @@ void ui_PorukeScreen_screen_destroy(void)
     // NULL screen variables
     ui_PorukeScreen = NULL;
     ui_Keyboard1 = NULL;
-    ui_NazadButton = NULL;
 
 }

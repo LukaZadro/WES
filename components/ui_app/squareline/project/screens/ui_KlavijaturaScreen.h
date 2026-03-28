@@ -3,18 +3,17 @@
 // LVGL version: 8.3.6
 // Project name: esp32_gui
 
-#ifndef UI_PORUKESCREEN_H
-#define UI_PORUKESCREEN_H
+#ifndef UI_KLAVIJATURASCREEN_H
+#define UI_KLAVIJATURASCREEN_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// SCREEN: ui_PorukeScreen
-extern void ui_PorukeScreen_screen_init(void);
-extern void ui_PorukeScreen_screen_destroy(void);
-extern lv_obj_t * ui_PorukeScreen;
-extern lv_obj_t * ui_Keyboard1;
+// SCREEN: ui_KlavijaturaScreen
+extern void ui_KlavijaturaScreen_screen_init(void);
+extern void ui_KlavijaturaScreen_screen_destroy(void);
+extern lv_obj_t * ui_KlavijaturaScreen;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

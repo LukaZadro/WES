@@ -312,8 +312,11 @@ void ui_init(void)
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     ui_HomePage_screen_init();
-    ui_PorukeScreen_screen_init();
     ui_TetrisScreen_screen_init();
+    ui_MemoryScreen_screen_init();
+    ui_SOSScreen_screen_init();
+    ui_PorukeScreen_screen_init();
+    ui_KlavijaturaScreen_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_HomePage);
 }
@@ -321,6 +324,9 @@ void ui_init(void)
 void ui_destroy(void)
 {
     ui_HomePage_screen_destroy();
-    ui_PorukeScreen_screen_destroy();
     ui_TetrisScreen_screen_destroy();
+    ui_MemoryScreen_screen_destroy();
+    ui_SOSScreen_screen_destroy();
+    ui_PorukeScreen_screen_destroy();
+    ui_KlavijaturaScreen_screen_destroy();
 }
