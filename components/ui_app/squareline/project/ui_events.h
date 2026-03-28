@@ -10,8 +10,8 @@
 extern "C" {
 #endif
 
-void dark_mode_on(lv_event_t * e);
-void dark_mode_off(lv_event_t * e);
+void plava_boja(lv_event_t * e);
+void roza_boja(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/
