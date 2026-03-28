@@ -1,8 +1,8 @@
-file(GLOB_RECURSE SOURCES
-    "${CMAKE_CURRENT_LIST_DIR}/*.c"
-)
-
-# Ignore temporary/generated backups if present.
-list(FILTER SOURCES EXCLUDE REGEX ".*/(backup|cache)/.*\\.c$")
+SET(SOURCES screens/ui_HomePage.c
+    screens/ui_Poruke1.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    ui_events.c)
 
 add_library(ui ${SOURCES})
