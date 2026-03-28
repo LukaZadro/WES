@@ -88,7 +88,7 @@ void ui_HomePage_screen_init(void)
     lv_obj_clear_flag(ui_HomePage, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0x88BADC), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_HomePage, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_1568848321, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_527192083, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ColorSwitch = lv_switch_create(ui_HomePage);
     lv_obj_set_width(ui_ColorSwitch, 50);
