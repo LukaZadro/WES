@@ -18,6 +18,7 @@ lv_obj_t * ui_Image3 = NULL;
 lv_obj_t * ui_Image4 = NULL;
 lv_obj_t * ui_Image5 = NULL;
 lv_obj_t * ui_Image6 = NULL;
+lv_obj_t * ui_Image1 = NULL;
 // event funtions
 void ui_event_ColorSwitch(lv_event_t * e)
 {
@@ -200,6 +201,14 @@ void ui_HomePage_screen_init(void)
     lv_obj_add_flag(ui_Image6, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image6, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    ui_Image1 = lv_img_create(ui_HomePage);
+    lv_img_set_src(ui_Image1, &ui_img_wp2844947_png);
+    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Image1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Memory, ui_event_Memory, LV_EVENT_ALL, NULL);
@@ -227,5 +236,6 @@ void ui_HomePage_screen_destroy(void)
     ui_Image4 = NULL;
     ui_Image5 = NULL;
     ui_Image6 = NULL;
+    ui_Image1 = NULL;
 
 }

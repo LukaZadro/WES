@@ -14,6 +14,7 @@ SET(SOURCES screens/ui_HomePage.c
     images/ui_img_messages_icon_80x80_png.c
     images/ui_img_tetris_icon_80x80_png.c
     images/ui_img_sos_30x30_png.c
+    images/ui_img_wp2844947_png.c
     images/ui_img_back_button_30x30_png.c
     images/ui_img_sos_120x120_png.c)
 

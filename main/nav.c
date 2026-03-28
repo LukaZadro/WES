@@ -173,7 +173,7 @@ static void _do_go_back(void *arg)
     } else if (scr == ui_SOSScreen) {
         lv_event_send(ui_GumbSOS, LV_EVENT_CLICKED, NULL);
     } else if (scr == ui_PorukeScreen) {
-        lv_event_send(ui_ImgButton16, LV_EVENT_CLICKED, NULL);
+        lv_event_send(ui_BackButtonMsg, LV_EVENT_CLICKED, NULL);
     } else if (scr == ui_KlavijaturaScreen) {
         lv_event_send(ui_ImgButton10, LV_EVENT_CLICKED, NULL);
     }
@@ -210,7 +210,7 @@ void nav_init(void)
         lv_group_add_obj(_group_home, _home_objs[i]);
 
     /* ---- PorukeScreen ---- */
-    lv_group_add_obj(_group_poruke, ui_ImgButton16);
+    lv_group_add_obj(_group_poruke, ui_BackButtonMsg);
     lv_group_add_obj(_group_poruke, ui_Keyboard1);
 
     /* ---- TetrisScreen ---- */
