@@ -8,7 +8,7 @@
 
 void plava_boja(lv_event_t * e)
 {
-	// Your code here
+	// Your code heregit
 }
 
 void roza_boja(lv_event_t * e)
