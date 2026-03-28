@@ -1,6 +1,5 @@
 #include "nav.h"
 #include "ui.h"
-#include "max98357a.h"
 
 /* ------------------------------------------------------------------ */
 /*  Shared key state for ENTER only (written from any task)            */
@@ -160,8 +159,15 @@ static void _do_go_back(void *arg)
 {
     (void)arg;
 
-    /* Kill all audio before any screen transition */
-    max98357a_stop_playback();
+    /* Do NOT call max98357a_stop_playback() here — it sets s_stop_requested
+     * which is fine, but the old implementation also called i2s_channel_disable
+     * from the LVGL task while the audio task holds the I2S write lock.
+     * That blocked the LVGL task and made the back button appear unresponsive.
+     * Audio cleanup is handled by each screen's own exit callback:
+     *   Tetris  → exit_tetris()   (via ui_event_ImgButton15)
+     *   SOS     → sos_music_off() (via ui_event_GumbSOS)
+     *   Piano   → max98357a_cut_audio() called by _piano_worker after each note
+     */
 
     lv_obj_t *scr = lv_scr_act();
 

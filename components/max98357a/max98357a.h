@@ -141,6 +141,13 @@ void max98357a_stop_playback(void);
  */
 void max98357a_resume_playback(void);
 
+/**
+ * @brief Disable then re-enable the I2S channel to immediately silence DMA output.
+ *        MUST be called from the audio task context (NOT the LVGL task) to avoid
+ *        blocking the LVGL task while the audio task holds the I2S write lock.
+ */
+void max98357a_cut_audio(void);
+
 void play_sos(void);
 void play_tetris(void);
 

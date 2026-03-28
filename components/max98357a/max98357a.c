@@ -304,9 +304,19 @@ void max98357a_stop_playback(void)
 {
     if(!s_initialised || !s_tx_chan) return;
 
+<<<<<<< HEAD
     /* Signal play_raw/play_tone to exit at the next chunk boundary. */
+=======
+    /* Signal any ongoing play_raw to abort at the next chunk boundary (~6 ms).
+     * Do NOT call i2s_channel_disable here — that call blocks if another task
+     * is currently inside i2s_channel_write, which would freeze the LVGL task.
+     * Instead, call max98357a_cut_audio() from within the audio task itself
+     * after it exits its playback loop. */
+>>>>>>> 9006a62 (svi gumbovi i joystick rade)
     s_stop_requested = true;
+}
 
+<<<<<<< HEAD
     /* Disable the hardware immediately — cuts audio output instantly.
      * Do NOT re-enable here: re-enabling causes the DMA to replay the
      * last buffer in a loop, which is exactly the "note stuck forever" bug.
@@ -316,6 +326,18 @@ void max98357a_stop_playback(void)
         i2s_channel_disable(s_tx_chan);
         s_channel_running = false;
     }
+=======
+void max98357a_cut_audio(void)
+{
+    if(!s_initialised || !s_tx_chan) return;
+
+    /* Immediately silence the I2S DMA output.
+     * MUST be called from the audio task that owns the channel (NOT from the
+     * LVGL task), otherwise i2s_channel_disable may block waiting for the
+     * task that holds the write lock. */
+    i2s_channel_disable(s_tx_chan);
+    i2s_channel_enable(s_tx_chan);
+>>>>>>> 9006a62 (svi gumbovi i joystick rade)
 }
 
 void max98357a_resume_playback(void)

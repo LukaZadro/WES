@@ -72,6 +72,9 @@ static void _tetris_task(void *arg)
             max98357a_play_raw(silence, sizeof(silence), 200);
     }
 
+    /* Cut DMA output from this task — safe to call here because we are
+     * no longer inside i2s_channel_write, so no lock contention. */
+    max98357a_cut_audio();
     _tetris_task_hdl = NULL;
     vTaskDelete(NULL);
 }
@@ -148,6 +151,7 @@ static void _sos_task(void *arg)
         _sos_delay(1000);
     }
 
+    max98357a_cut_audio();
     _sos_task_hdl = NULL;
     vTaskDelete(NULL);
 
@@ -199,7 +203,11 @@ static void _piano_worker(void *arg)
 
             max98357a_resume_playback();
             max98357a_play_tone(latest, 350, 80);
+<<<<<<< HEAD
             max98357a_stop_playback();
+=======
+            max98357a_cut_audio();  /* silence DMA after note — prevents residual buzz */
+>>>>>>> 9006a62 (svi gumbovi i joystick rade)
         }
     }
 }
