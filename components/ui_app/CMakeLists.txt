@@ -31,6 +31,6 @@ endforeach()
 
 list(REMOVE_DUPLICATES COMPONENT_ADD_INCLUDEDIRS)
 
-set(COMPONENT_PRIV_REQUIRES lvgl lvgl_esp32_drivers)
+set(COMPONENT_PRIV_REQUIRES lvgl lvgl_esp32_drivers max98357a freertos)
 
 register_component()

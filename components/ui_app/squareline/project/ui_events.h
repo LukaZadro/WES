@@ -12,6 +12,7 @@ extern "C" {
 
 void plava_boja(lv_event_t * e);
 void roza_boja(lv_event_t * e);
+void sos_button_pressed(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

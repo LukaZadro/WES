@@ -129,6 +129,7 @@ esp_err_t max98357a_play_tone(uint32_t freq_hz, uint32_t duration_ms,
  * @param enable  true  = amplifier on, false = amplifier off (low-power).
  */
 void max98357a_set_enable(bool enable);
+void play_sos(void);
 void play_tetris(void);
 
 #endif /* MAX98357A_H */

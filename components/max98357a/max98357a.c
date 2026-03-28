@@ -294,19 +294,57 @@ static void _sd_mode_gpio_init(int gpio_num)
     gpio_set_level((gpio_num_t)gpio_num, 0); /* start disabled */
 }
 
-void play_tetris()
+void play_sos(void)
 {
-    // Frequencies in Hz (precomputed notes)
-    uint16_t notes[] = {
-        659, 988, 1047, 1175, 1047, 988, 880, 880,
-        1047, 1319, 1568, 1397, 1319, 1175, 1047, 1047,
-        1175, 1319, 1047, 880, 880
-    };
+    /* SOS in Morse code: ... --- ...
+       Short = 150ms, Long = 450ms, gap between signals = 150ms, gap between letters = 450ms */
+    #define DOT  150
+    #define DASH 450
+    #define GAP  150
+    #define LGAP 450
 
-    uint16_t durations[] = {
-        200,200,200,200,200,200,300,100,
-        200,200,300,200,200,200,300,100,
-        200,200,300,300,400
+    /* S = ... */
+    max98357a_play_tone(880, DOT,  80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(880, DOT,  80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(880, DOT,  80); vTaskDelay(pdMS_TO_TICKS(LGAP));
+    /* O = --- */
+    max98357a_play_tone(660, DASH, 80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(660, DASH, 80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(660, DASH, 80); vTaskDelay(pdMS_TO_TICKS(LGAP));
+    /* S = ... */
+    max98357a_play_tone(880, DOT,  80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(880, DOT,  80); vTaskDelay(pdMS_TO_TICKS(GAP));
+    max98357a_play_tone(880, DOT,  80);
+
+    #undef DOT
+    #undef DASH
+    #undef GAP
+    #undef LGAP
+}
+
+void play_tetris(void)
+{
+    /* Tetris A (Korobeiniki) – correct frequencies, 160 BPM
+       E=187ms  Q=375ms  DQ=562ms  H=750ms */
+    static const uint16_t notes[] = {
+        /* Part 1 */
+        659, 494, 523, 587, 523, 494,
+        440, 440, 523, 659, 587, 523,
+        494, 523, 587, 659, 523, 440, 440,
+        /* Part 2 */
+        587, 698, 880, 784, 698,
+        659, 523, 659, 587, 523,
+        494, 494, 523, 587, 659, 523, 440, 440
+    };
+    static const uint16_t durations[] = {
+        /* Part 1 */
+        375, 187, 187, 375, 187, 187,
+        375, 187, 187, 375, 187, 187,
+        562, 187, 375, 375, 375, 375, 750,
+        /* Part 2 */
+        375, 187, 375, 187, 187,
+        562, 187, 375, 187, 187,
+        375, 187, 187, 375, 375, 375, 375, 750
     };
 
     int len = sizeof(notes) / sizeof(notes[0]);
@@ -314,6 +352,7 @@ void play_tetris()
     for(int i = 0; i < len; i++)
     {
         max98357a_play_tone(notes[i], durations[i], 80);
-        vTaskDelay(pdMS_TO_TICKS(20)); // small gap
+        /* 20ms zero-amplitude gap keeps DMA fed with silence */
+        max98357a_play_tone(notes[i], 20, 0);
     }
 }

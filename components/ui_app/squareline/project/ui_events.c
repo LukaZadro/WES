@@ -4,7 +4,9 @@
 // Project name: esp32_gui
 
 #include "ui.h"
-
+#include "max98357a.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 void plava_boja(lv_event_t * e)
 {
@@ -14,4 +16,19 @@ void plava_boja(lv_event_t * e)
 void roza_boja(lv_event_t * e)
 {
 	// Your code here
+}
+
+static void _sos_task(void *arg)
+{
+    play_sos();
+    vTaskDelete(NULL);
+}
+
+void sos_button_pressed(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    if(event_code == LV_EVENT_CLICKED)
+    {
+        xTaskCreate(_sos_task, "sos", 4096, NULL, 5, NULL);
+    }
 }

@@ -96,6 +96,7 @@ void ui_HomePage_screen_init(void)
 
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SOS, sos_button_pressed, LV_EVENT_ALL, NULL);
 
 }
 
