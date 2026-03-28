@@ -9,6 +9,8 @@
 //--------------------------------- INCLUDES ----------------------------------
 #include "gui.h"
 #include "max98357a.h"
+#include "wifi_station.h"
+#include "mqtt_client_bl.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
@@ -39,9 +41,7 @@ static void _sound_task(void *arg)
    ESP_LOGI(TAG, "Initialising amplifier...");
    max98357a_init(&cfg);
 
-   max98357a_play_tone(523, 320, 80);  /* C5 */
-   max98357a_play_tone(659, 320, 80);  /* E5 */
-   max98357a_play_tone(784, 500, 80);  /* G5 */
+   play_tetris();
    ESP_LOGI(TAG, "Done.");
 
    max98357a_deinit();
@@ -50,6 +50,9 @@ static void _sound_task(void *arg)
 
 void app_main(void)
 {
+   wifi_station_init();
+   mqtt_client_bl_init();
+
    xTaskCreatePinnedToCore(_sound_task, "sound", 4096, NULL, 5, NULL, 0);
    gui_init();
 }

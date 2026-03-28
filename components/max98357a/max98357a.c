@@ -293,3 +293,27 @@ static void _sd_mode_gpio_init(int gpio_num)
     gpio_config(&io_conf);
     gpio_set_level((gpio_num_t)gpio_num, 0); /* start disabled */
 }
+
+void play_tetris()
+{
+    // Frequencies in Hz (precomputed notes)
+    uint16_t notes[] = {
+        659, 988, 1047, 1175, 1047, 988, 880, 880,
+        1047, 1319, 1568, 1397, 1319, 1175, 1047, 1047,
+        1175, 1319, 1047, 880, 880
+    };
+
+    uint16_t durations[] = {
+        200,200,200,200,200,200,300,100,
+        200,200,300,200,200,200,300,100,
+        200,200,300,300,400
+    };
+
+    int len = sizeof(notes) / sizeof(notes[0]);
+
+    for(int i = 0; i < len; i++)
+    {
+        max98357a_play_tone(notes[i], durations[i], 80);
+        vTaskDelay(pdMS_TO_TICKS(20)); // small gap
+    }
+}

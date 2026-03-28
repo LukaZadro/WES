@@ -71,8 +71,8 @@ void wifi_station_init(void)
 
     wifi_config_t wifi_config = {
         .sta = {
-            .ssid = CONFIG_WIFI_STATION_SSID,
-            .password = CONFIG_WIFI_STATION_PASSWORD,
+            .ssid = "TvojSSID",
+            .password = "TvojaLozinka",
             .threshold.authmode = WIFI_AUTH_WPA2_PSK,
         },
     };
