@@ -22,11 +22,13 @@ static volatile bool _sos_running     = false;
 void is_blue_mode(lv_event_t * e)
 {
     (void)e;
-    /* Only act when the switch is NOT checked (blue/Ben10 mode) */
+    /* Only act when the switch is NOT checked (blue/boy mode) */
     if (ui_ColorSwitch && lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED))
         return;
 
     lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_527192083,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_opa(ui_HomePage, LV_OPA_COVER,
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0x88BADC),
                               LV_PART_MAIN | LV_STATE_DEFAULT);

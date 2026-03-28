@@ -27,6 +27,7 @@
 
 #include "ui_app/ui_app.h"
 #include "nav.h"
+#include "ui_events.h"
 //---------------------------------- MACROS -----------------------------------
 #define LV_TICK_PERIOD_MS (1U)
 
@@ -73,6 +74,9 @@ static void _create_demo_application(void)
 {
     ui_app_init();
     nav_init();
+    /* Apply correct initial background image — bg_img_opa defaults to 0 in
+     * LVGL so the image won't show until this is called explicitly. */
+    is_blue_mode(NULL);
 }
 
 static void _lv_tick_timer(void *p_arg)
