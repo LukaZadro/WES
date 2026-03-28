@@ -53,8 +53,6 @@ LV_IMG_DECLARE(ui_img_sos_120x120_png);    // assets/sos_120x120.png
 void ui_init(void);
 void ui_destroy(void);
 
-void setup_tetris_ui(void);
-
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

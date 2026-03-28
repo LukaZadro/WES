@@ -1,6 +1,8 @@
+#include "core/lv_group.h"
 #include "gui.h"
 #include "nav.h"
 #include "max98357a.h"
+#include "ui_app/tetris_ui_draw.h"
 #include "wifi_station.h"
 #include "mqtt_client_bl.h"
 #include "buttons.h"
@@ -60,7 +62,9 @@ static void _button_task(void *arg)
             switch (evt.id)
             {
                 case BUTTON_1:
-                    if (evt.pressed) lv_async_call(_toggle_switch_cb, NULL);
+                    if (evt.pressed)
+                        if (!tetris_movement(tetris_rotate_right))
+                            lv_async_call(_toggle_switch_cb, NULL);
                     break;
                 case BUTTON_2:
                     /* Back button — navigate to the previous screen */
@@ -108,8 +112,26 @@ static void _joystick_event_cb(joystick_pos_t pos)
         else if (pos.y < -JOY_THRESHOLD) dir = LV_KEY_UP;
     }
 
+    bool moved = false;
+    switch (dir) {
+        case 0:
+            break;
+        case LV_KEY_LEFT:
+            moved = tetris_movement(tetris_move_left);
+            break;
+        case LV_KEY_RIGHT:
+            moved = tetris_movement(tetris_move_right);
+            break;
+        case LV_KEY_DOWN:
+            moved = tetris_movement(tetris_soft_drop);
+            break;
+        case LV_KEY_UP:
+            moved = tetris_movement(tetris_hard_drop);
+            break;
+    }
+
     /* Fire spatial navigation once per new direction (no auto-repeat spam) */
-    if (dir != 0 && dir != prev_dir)
+    if (!moved && dir != 0 && dir != prev_dir)
         nav_move_dir(dir);
 
     prev_dir = dir;

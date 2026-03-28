@@ -81,6 +81,37 @@ void ui_event_draw_board(lv_event_t * e)
     }
 }
 
+bool tetris_movement(movement_t movement)
+{
+    tetris_game_t *g = game;
+    if (g == NULL) return false;
+
+    switch (movement) {
+        case tetris_move_left:
+            tetris_move(g, -1);
+            break;
+        case tetris_move_right:
+            tetris_move(g, +1);
+            break;
+        case tetris_soft_drop:
+            tetris_drop(g);
+            break;
+        case tetris_hard_drop:
+            // TODO
+            break;
+        case tetris_rotate_left:
+            // TODO
+            break;
+        case tetris_rotate_right:
+            tetris_rotate(g);
+            break;
+    }
+
+    lv_obj_invalidate(ui_Panel1);
+
+    return true;
+}
+
 static void game_step_timer_cb(lv_timer_t * timer)
 {
     if (game != NULL && tetris_tick(game)) {

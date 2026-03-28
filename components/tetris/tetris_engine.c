@@ -69,11 +69,7 @@ static void lock_piece(tetris_game_t *game) {
 
 bool tetris_tick(tetris_game_t *game) {
     if (game->game_over) return false;
-    if (!check_collision(game, game->current_piece.x, game->current_piece.y + 1, game->current_piece.rotation)) {
-        game->current_piece.y++;
-    } else {
-        lock_piece(game);
-    }
+    tetris_drop(game);
     return true;
 }
 
@@ -87,5 +83,13 @@ void tetris_rotate(tetris_game_t *game) {
     int next_rot = (game->current_piece.rotation + 1) % 4;
     if (!check_collision(game, game->current_piece.x, game->current_piece.y, next_rot)) {
         game->current_piece.rotation = next_rot;
+    }
+}
+
+void tetris_drop(tetris_game_t *game) {
+    if (!check_collision(game, game->current_piece.x, game->current_piece.y + 1, game->current_piece.rotation)) {
+        game->current_piece.y++;
+    } else {
+        lock_piece(game);
     }
 }
