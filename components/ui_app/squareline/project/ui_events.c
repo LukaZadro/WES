@@ -1,4 +1,5 @@
 // ui_events.c
+#include <stdio.h>
 #include "ui.h"
 #include "max98357a.h"
 #include "freertos/FreeRTOS.h"
@@ -93,9 +94,15 @@ void exit_tetris(lv_event_t * e)
 {
 	destroy_tetris_ui();
     (void)e;
+    printf("[tetris] exit_tetris called, task handle = %p\n", (void *)_tetris_task_hdl);
+
+    /* Stop the task gracefully — do NOT call vTaskDelete from here.
+     * The tetris task holds the I2S driver mutex inside i2s_channel_write.
+     * Deleting it from outside leaks that mutex and stop_playback deadlocks. */
     _tetris_running = false;
-    max98357a_stop_playback();
-    /* Task checks _tetris_running and self-deletes; handle is cleared there */
+    max98357a_stop_playback();   /* sets s_stop_requested, disables I2S channel */
+
+    printf("[tetris] stop requested, task will self-delete shortly\n");
 }
 
 /* ------------------------------------------------------------------ */
@@ -196,6 +203,7 @@ static void _piano_worker(void *arg)
 
             max98357a_resume_playback();
             max98357a_play_tone(latest, 350, 80);
+            max98357a_stop_playback();
         }
     }
 }
