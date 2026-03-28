@@ -1,5 +1,6 @@
 SET(SOURCES screens/ui_HomePage.c
-    screens/ui_Poruke1.c
+    screens/ui_PorukeScreen.c
+    screens/ui_TetrisScreen.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c

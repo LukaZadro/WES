@@ -21,6 +21,7 @@ extern void ui_event_Poruke(lv_event_t * e);
 extern lv_obj_t * ui_Poruke;
 extern lv_obj_t * ui_Memory;
 extern lv_obj_t * ui_SOS;
+extern void ui_event_Tetris(lv_event_t * e);
 extern lv_obj_t * ui_Tetris;
 // CUSTOM VARIABLES
 

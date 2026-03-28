@@ -19,7 +19,8 @@ extern "C" {
 ///////////////////// SCREENS ////////////////////
 
 #include "screens/ui_HomePage.h"
-#include "screens/ui_Poruke1.h"
+#include "screens/ui_PorukeScreen.h"
+#include "screens/ui_TetrisScreen.h"
 
 ///////////////////// VARIABLES ////////////////////
 

@@ -30,7 +30,16 @@ void ui_event_Poruke(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Poruke1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Poruke1_screen_init);
+        _ui_screen_change(&ui_PorukeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_PorukeScreen_screen_init);
+    }
+}
+
+void ui_event_Tetris(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_TetrisScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_TetrisScreen_screen_init);
     }
 }
 
@@ -96,6 +105,7 @@ void ui_HomePage_screen_init(void)
 
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Tetris, ui_event_Tetris, LV_EVENT_ALL, NULL);
 
 }
 
