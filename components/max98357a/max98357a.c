@@ -307,14 +307,18 @@ void max98357a_stop_playback(void)
     /* Signal play_raw/play_tone to exit at the next chunk boundary. */
     s_stop_requested = true;
 
-    /* Disable the hardware immediately — cuts audio output instantly.
-     * Do NOT re-enable here: re-enabling causes the DMA to replay the
-     * last buffer in a loop, which is exactly the "note stuck forever" bug.
-     * resume_playback() will re-enable when new audio is about to start. */
     if(s_channel_running)
     {
         i2s_channel_disable(s_tx_chan);
         s_channel_running = false;
+
+        /* Preload silence into every DMA descriptor while the channel is
+         * stopped.  When resume_playback() re-enables the channel the DMA
+         * will output silence instead of replaying the previous note. */
+        static const int16_t silence[MAX98357A_DMA_BUF_LEN * 2] = {0};
+        size_t loaded;
+        for(int i = 0; i < MAX98357A_DMA_BUF_COUNT; i++)
+            i2s_channel_preload_data(s_tx_chan, silence, sizeof(silence), &loaded);
     }
 }
 

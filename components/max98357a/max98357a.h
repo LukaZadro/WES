@@ -58,9 +58,11 @@
 #define MAX98357A_BITS_PER_SAMPLE (16U)
 #endif
 
-/** DMA buffer configuration. */
-#define MAX98357A_DMA_BUF_COUNT (8U)
-#define MAX98357A_DMA_BUF_LEN   (1024U)
+/** DMA buffer configuration.
+ *  BUF_LEN matches TONE_CHUNK_FRAMES (256) so each play_tone write fills
+ *  exactly one descriptor — keeps latency at BUF_COUNT × 5.8 ms ≈ 17 ms. */
+#define MAX98357A_DMA_BUF_COUNT (3U)
+#define MAX98357A_DMA_BUF_LEN   (256U)
 
 //-------------------------------- DATA TYPES ---------------------------------
 
