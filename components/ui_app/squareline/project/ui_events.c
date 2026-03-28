@@ -33,8 +33,14 @@ static void _tetris_task(void *arg)
 
 static void _sos_task(void *arg)
 {
-    play_sos();
-    vTaskDelete(NULL);
+    static const int16_t silence[512] = {0};
+    while(1)
+    {
+        play_sos();
+        /* 1 second pause between repetitions */
+        for(int i = 0; i < 44; i++)
+            max98357a_play_raw(silence, sizeof(silence), 1000);
+    }
 }
 
 void sos_button_pressed(lv_event_t * e)
