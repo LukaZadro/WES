@@ -13,6 +13,9 @@ lv_obj_t * ui_Dark_Mode_Label = NULL;
 lv_obj_t * ui_Dark_Mode_Switch = NULL;
 lv_obj_t * ui_Settings_Btn_Home = NULL;
 lv_obj_t * ui_Settings_Icon_Home = NULL;
+lv_obj_t * ui_GumbPali = NULL;
+lv_obj_t * ui_Panel1 = NULL;
+lv_obj_t * ui_Button1 = NULL;
 // event funtions
 void ui_event_Color_Btn_Home(lv_event_t * e)
 {
@@ -144,6 +147,32 @@ void ui_Home_Scr_screen_init(void)
     lv_obj_set_style_bg_color(ui_Settings_Icon_Home, lv_color_hex(0x6AC6A4), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Settings_Icon_Home, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_GumbPali = lv_btn_create(ui_Home_Scr);
+    lv_obj_set_width(ui_GumbPali, 33);
+    lv_obj_set_height(ui_GumbPali, 33);
+    lv_obj_set_y(ui_GumbPali, -97);
+    lv_obj_set_x(ui_GumbPali, lv_pct(44));
+    lv_obj_set_align(ui_GumbPali, LV_ALIGN_BOTTOM_LEFT);
+
+    ui_Panel1 = lv_obj_create(ui_Home_Scr);
+    lv_obj_set_width(ui_Panel1, 100);
+    lv_obj_set_height(ui_Panel1, 50);
+    lv_obj_set_x(ui_Panel1, 1);
+    lv_obj_set_y(ui_Panel1, -77);
+    lv_obj_set_align(ui_Panel1, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_Panel1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Button1 = lv_btn_create(ui_Home_Scr);
+    lv_obj_set_width(ui_Button1, 100);
+    lv_obj_set_height(ui_Button1, 50);
+    lv_obj_set_x(ui_Button1, -42);
+    lv_obj_set_y(ui_Button1, 75);
+    lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_Button1, lv_color_hex(0x1E7D0F), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor(ui_Button1, lv_color_hex(0x40FF9B), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor_opa(ui_Button1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_add_event_cb(ui_Color_Btn_Home, ui_event_Color_Btn_Home, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Dark_Mode_Switch, ui_event_Dark_Mode_Switch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Settings_Btn_Home, ui_event_Settings_Btn_Home, LV_EVENT_ALL, NULL);
@@ -163,5 +192,8 @@ void ui_Home_Scr_screen_destroy(void)
     ui_Dark_Mode_Switch = NULL;
     ui_Settings_Btn_Home = NULL;
     ui_Settings_Icon_Home = NULL;
+    ui_GumbPali = NULL;
+    ui_Panel1 = NULL;
+    ui_Button1 = NULL;
 
 }
