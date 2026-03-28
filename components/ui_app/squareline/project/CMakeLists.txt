@@ -1,5 +1,9 @@
 SET(SOURCES screens/ui_HomePage.c
-    screens/ui_Poruke1.c
+    screens/ui_TetrisScreen.c
+    screens/ui_MemoryScreen.c
+    screens/ui_SOSScreen.c
+    screens/ui_PorukeScreen.c
+    screens/ui_KlavijaturaScreen.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c

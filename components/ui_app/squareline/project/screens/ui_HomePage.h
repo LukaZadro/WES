@@ -19,9 +19,14 @@ extern lv_obj_t * ui_ColorSwitch;
 extern lv_obj_t * ui_Label1;
 extern void ui_event_Poruke(lv_event_t * e);
 extern lv_obj_t * ui_Poruke;
+extern void ui_event_Memory(lv_event_t * e);
 extern lv_obj_t * ui_Memory;
+extern void ui_event_SOS(lv_event_t * e);
 extern lv_obj_t * ui_SOS;
+extern void ui_event_Tetris(lv_event_t * e);
 extern lv_obj_t * ui_Tetris;
+extern void ui_event_Klavijatura(lv_event_t * e);
+extern lv_obj_t * ui_Klavijatura;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

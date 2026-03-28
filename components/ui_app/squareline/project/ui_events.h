@@ -10,9 +10,10 @@
 extern "C" {
 #endif
 
-void plava_boja(lv_event_t * e);
+void is_blue_mode(lv_event_t * e);
 void roza_boja(lv_event_t * e);
 void sos_button_pressed(lv_event_t * e);
+void tetris_music_on(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -5,18 +5,18 @@
 
 #include "../ui.h"
 
-lv_obj_t * ui_Poruke1 = NULL;
+lv_obj_t * ui_PorukeScreen = NULL;
 lv_obj_t * ui_Keyboard1 = NULL;
 // event funtions
 
 // build funtions
 
-void ui_Poruke1_screen_init(void)
+void ui_PorukeScreen_screen_init(void)
 {
-    ui_Poruke1 = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_Poruke1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_PorukeScreen = lv_obj_create(NULL);
+    lv_obj_clear_flag(ui_PorukeScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_Keyboard1 = lv_keyboard_create(ui_Poruke1);
+    ui_Keyboard1 = lv_keyboard_create(ui_PorukeScreen);
     lv_obj_set_width(ui_Keyboard1, 317);
     lv_obj_set_height(ui_Keyboard1, 120);
     lv_obj_set_x(ui_Keyboard1, 1);
@@ -25,12 +25,12 @@ void ui_Poruke1_screen_init(void)
 
 }
 
-void ui_Poruke1_screen_destroy(void)
+void ui_PorukeScreen_screen_destroy(void)
 {
-    if(ui_Poruke1) lv_obj_del(ui_Poruke1);
+    if(ui_PorukeScreen) lv_obj_del(ui_PorukeScreen);
 
     // NULL screen variables
-    ui_Poruke1 = NULL;
+    ui_PorukeScreen = NULL;
     ui_Keyboard1 = NULL;
 
 }

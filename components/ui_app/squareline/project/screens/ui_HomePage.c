@@ -12,13 +12,14 @@ lv_obj_t * ui_Poruke = NULL;
 lv_obj_t * ui_Memory = NULL;
 lv_obj_t * ui_SOS = NULL;
 lv_obj_t * ui_Tetris = NULL;
+lv_obj_t * ui_Klavijatura = NULL;
 // event funtions
 void ui_event_ColorSwitch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        plava_boja(e);
+        is_blue_mode(e);
     }
     if(event_code == LV_EVENT_CLICKED) {
         roza_boja(e);
@@ -30,7 +31,46 @@ void ui_event_Poruke(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Poruke1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Poruke1_screen_init);
+        _ui_screen_change(&ui_PorukeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_PorukeScreen_screen_init);
+    }
+}
+
+void ui_event_Memory(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_MemoryScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_MemoryScreen_screen_init);
+    }
+}
+
+void ui_event_SOS(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_SOSScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_SOSScreen_screen_init);
+    }
+}
+
+void ui_event_Tetris(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_TetrisScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_TetrisScreen_screen_init);
+    }
+    if(event_code == LV_EVENT_CLICKED) {
+        tetris_music_on(e);
+    }
+}
+
+void ui_event_Klavijatura(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_KlavijaturaScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_KlavijaturaScreen_screen_init);
     }
 }
 
@@ -77,10 +117,10 @@ void ui_HomePage_screen_init(void)
     lv_obj_set_style_bg_opa(ui_Memory, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_SOS = lv_btn_create(ui_HomePage);
-    lv_obj_set_width(ui_SOS, 80);
-    lv_obj_set_height(ui_SOS, 80);
-    lv_obj_set_x(ui_SOS, 50);
-    lv_obj_set_y(ui_SOS, 40);
+    lv_obj_set_width(ui_SOS, 30);
+    lv_obj_set_height(ui_SOS, 24);
+    lv_obj_set_x(ui_SOS, -135);
+    lv_obj_set_y(ui_SOS, 95);
     lv_obj_set_align(ui_SOS, LV_ALIGN_CENTER);
     lv_obj_set_style_bg_color(ui_SOS, lv_color_hex(0xC80000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_SOS, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -94,9 +134,21 @@ void ui_HomePage_screen_init(void)
     lv_obj_set_style_bg_color(ui_Tetris, lv_color_hex(0xDEE913), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Tetris, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Klavijatura = lv_btn_create(ui_HomePage);
+    lv_obj_set_width(ui_Klavijatura, 80);
+    lv_obj_set_height(ui_Klavijatura, 80);
+    lv_obj_set_x(ui_Klavijatura, 50);
+    lv_obj_set_y(ui_Klavijatura, 40);
+    lv_obj_set_align(ui_Klavijatura, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_Klavijatura, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Klavijatura, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_SOS, sos_button_pressed, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Memory, ui_event_Memory, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SOS, ui_event_SOS, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Tetris, ui_event_Tetris, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Klavijatura, ui_event_Klavijatura, LV_EVENT_ALL, NULL);
 
 }
 
@@ -112,5 +164,6 @@ void ui_HomePage_screen_destroy(void)
     ui_Memory = NULL;
     ui_SOS = NULL;
     ui_Tetris = NULL;
+    ui_Klavijatura = NULL;
 
 }
