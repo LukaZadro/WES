@@ -1,74 +1,15 @@
-<<<<<<< HEAD
-/**
-* @file main.c
-
-* @brief 
-* 
-* COPYRIGHT NOTICE: (c) 2022 Byte Lab Grupa d.o.o.
-* All rights reserved.
-*/
-//--------------------------------- INCLUDES ----------------------------------
-#include "gui.h"
-#include "max98357a.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_log.h"
-
-//---------------------------------- MACROS -----------------------------------
-=======
 #include "gui.h"
 #include "buttons.h"
 #include "joystick.h"
+#include "ui.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
->>>>>>> 9b63525 (Dodani joystick i gumbovi)
 
 #define TAG "main"
 
-<<<<<<< HEAD
-//---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
-
-//------------------------- STATIC DATA & CONSTANTS ---------------------------
-static const char *TAG = "app_main";
-
-//------------------------------- GLOBAL DATA ---------------------------------
-
-//------------------------------ PUBLIC FUNCTIONS -----------------------------
-static void _sound_task(void *arg)
-{
-   max98357a_cfg_t cfg = {
-      .i2s_num         = 0,
-      .gpio_bclk       = 26,   /* change to your wired GPIO */
-      .gpio_lrc        = 25,   /* change to your wired GPIO */
-      .gpio_dout       = 27,   /* change to your wired GPIO */
-      .gpio_sd_mode    = -1,   /* -1 if SHDN pin is tied HIGH */
-      .sample_rate     = 44100,
-      .bits_per_sample = 16,
-   };
-   ESP_LOGI(TAG, "Initialising amplifier...");
-   max98357a_init(&cfg);
-
-   max98357a_play_tone(523, 320, 80);  /* C5 */
-   max98357a_play_tone(659, 320, 80);  /* E5 */
-   max98357a_play_tone(784, 500, 80);  /* G5 */
-   ESP_LOGI(TAG, "Done.");
-
-   max98357a_deinit();
-   vTaskDelete(NULL);
-}
-
-void app_main(void)
-{
-   xTaskCreatePinnedToCore(_sound_task, "sound", 4096, NULL, 5, NULL, 0);
-   gui_init();
-=======
-/* ------------------------------------------------------------------ */
-/*  Button queue                                                        */
-/* ------------------------------------------------------------------ */
-typedef struct
-{
+typedef struct {
     button_id_t id;
     bool        pressed;
 } btn_event_t;
@@ -82,46 +23,68 @@ static void _button_event_cb(button_id_t id, bool pressed)
 {
     btn_event_t evt = { .id = id, .pressed = pressed };
     xQueueSendFromISR(_btn_queue, &evt, NULL);
->>>>>>> 9b63525 (Dodani joystick i gumbovi)
+}
+
+static void _toggle_switch_cb(void *arg)
+{
+    if (ui_ColorSwitch == NULL) return;
+
+    if (lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED)) {
+        lv_obj_clear_state(ui_ColorSwitch, LV_STATE_CHECKED);
+        plava_boja(NULL);
+    } else {
+        lv_obj_add_state(ui_ColorSwitch, LV_STATE_CHECKED);
+        roza_boja(NULL);
+    }
+}
+
+static void _go_poruke_cb(void *arg)
+{
+    _ui_screen_change(&ui_Poruke1, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Poruke1_screen_init);
 }
 
 static void _button_task(void *arg)
 {
     btn_event_t evt;
-    while(1)
+    while (1)
     {
-        if(xQueueReceive(_btn_queue, &evt, portMAX_DELAY))
+        if (xQueueReceive(_btn_queue, &evt, portMAX_DELAY))
         {
-            if(evt.id < BUTTON_COUNT)
+            if (!evt.pressed) continue;
+
+            ESP_LOGI(TAG, "%s PRESSED", _btn_names[evt.id]);
+
+            switch (evt.id)
             {
-                ESP_LOGI(TAG, "%s %s", _btn_names[evt.id],
-                         evt.pressed ? "PRESSED" : "RELEASED");
+                case BUTTON_1:
+                    lv_async_call(_toggle_switch_cb, NULL);
+                    break;
+                case BUTTON_2:
+                    lv_async_call(_go_poruke_cb, NULL);
+                    break;
+                case BUTTON_3:
+                    break;
+                case BUTTON_4:
+                    break;
+                default:
+                    break;
             }
         }
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Joystick callback                                                   */
-/* ------------------------------------------------------------------ */
 static void _joystick_event_cb(joystick_pos_t pos)
 {
     ESP_LOGI(TAG, "JOY  X: %4d  Y: %4d", pos.x, pos.y);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Entry point                                                         */
-/* ------------------------------------------------------------------ */
 void app_main(void)
 {
-    /* Buttons */
     _btn_queue = xQueueCreate(10, sizeof(btn_event_t));
     xTaskCreate(_button_task, "btn_task", 2048, NULL, 5, NULL);
     button_init(_button_event_cb);
 
-    /* Joystick */
     joystick_init(_joystick_event_cb);
 
-    /* GUI */
     gui_init();
 }
