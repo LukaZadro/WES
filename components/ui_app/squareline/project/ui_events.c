@@ -1,4 +1,5 @@
 // ui_events.c
+#include <stdio.h>
 #include "ui.h"
 #include "max98357a.h"
 #include "freertos/FreeRTOS.h"
@@ -25,8 +26,8 @@ void is_blue_mode(lv_event_t * e)
     if (ui_ColorSwitch && lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED))
         return;
 
-    lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_1568848321,
-                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_1568848321,
+    //                             LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0x88BADC),
                               LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_HomePage, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -84,9 +85,15 @@ void tetris_music_on(lv_event_t * e)
 void exit_tetris(lv_event_t * e)
 {
     (void)e;
+    printf("[tetris] exit_tetris called, task handle = %p\n", (void *)_tetris_task_hdl);
+
+    /* Stop the task gracefully — do NOT call vTaskDelete from here.
+     * The tetris task holds the I2S driver mutex inside i2s_channel_write.
+     * Deleting it from outside leaks that mutex and stop_playback deadlocks. */
     _tetris_running = false;
-    max98357a_stop_playback();
-    /* Task checks _tetris_running and self-deletes; handle is cleared there */
+    max98357a_stop_playback();   /* sets s_stop_requested, disables I2S channel */
+
+    printf("[tetris] stop requested, task will self-delete shortly\n");
 }
 
 /* ------------------------------------------------------------------ */
@@ -187,6 +194,7 @@ static void _piano_worker(void *arg)
 
             max98357a_resume_playback();
             max98357a_play_tone(latest, 350, 80);
+            max98357a_stop_playback();
         }
     }
 }

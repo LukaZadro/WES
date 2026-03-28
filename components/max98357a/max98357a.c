@@ -43,6 +43,7 @@ static uint32_t          s_sample_rate   = MAX98357A_SAMPLE_RATE;
 static uint8_t           s_bits_per_sample = MAX98357A_BITS_PER_SAMPLE;
 static bool              s_initialised   = false;
 static volatile bool     s_stop_requested = false;
+static volatile bool     s_channel_running = false;
 
 //---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
 static void _sd_mode_gpio_init(int gpio_num);
@@ -134,6 +135,7 @@ esp_err_t max98357a_init(const max98357a_cfg_t *cfg)
     s_sample_rate    = sample_rate;
     s_bits_per_sample = bits_per_sample;
     s_initialised    = true;
+    s_channel_running = true;
 
     /* Enable amplifier by default. */
     max98357a_set_enable(true);
@@ -258,6 +260,7 @@ esp_err_t max98357a_play_tone(uint32_t freq_hz, uint32_t duration_ms,
             }
         }
 
+        if(s_stop_requested) break;
         ret = max98357a_play_raw(buf, frames * 2U * bytes_per_sample, 1000U);
         if(ret != ESP_OK) break;
         sample_idx += frames;
@@ -301,24 +304,28 @@ void max98357a_stop_playback(void)
 {
     if(!s_initialised || !s_tx_chan) return;
 
-    /* Signal any ongoing play_raw to abort at the next chunk boundary */
+    /* Signal play_raw/play_tone to exit at the next chunk boundary. */
     s_stop_requested = true;
 
-    /* Disable the I2S channel immediately — cuts audio output and stops
-     * the DMA from looping the last buffer.
-     * Re-enable so the channel is ready for the next sound. */
-    i2s_channel_disable(s_tx_chan);
-    i2s_channel_enable(s_tx_chan);
-
-    /* NOTE: s_stop_requested is left TRUE here.
-     * Callers must call max98357a_resume_playback() before starting
-     * new audio.  This prevents any still-running task from sneaking
-     * a write through the freshly re-enabled channel. */
+    /* Disable the hardware immediately — cuts audio output instantly.
+     * Do NOT re-enable here: re-enabling causes the DMA to replay the
+     * last buffer in a loop, which is exactly the "note stuck forever" bug.
+     * resume_playback() will re-enable when new audio is about to start. */
+    if(s_channel_running)
+    {
+        i2s_channel_disable(s_tx_chan);
+        s_channel_running = false;
+    }
 }
 
 void max98357a_resume_playback(void)
 {
     s_stop_requested = false;
+    if(!s_channel_running)
+    {
+        i2s_channel_enable(s_tx_chan);
+        s_channel_running = true;
+    }
 }
 
 void play_sos(void)
