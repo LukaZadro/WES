@@ -129,6 +129,18 @@ esp_err_t max98357a_play_tone(uint32_t freq_hz, uint32_t duration_ms,
  * @param enable  true  = amplifier on, false = amplifier off (low-power).
  */
 void max98357a_set_enable(bool enable);
+
+/**
+ * @brief Signal all ongoing playback to stop at the next chunk boundary (~6 ms).
+ *        Call max98357a_resume_playback() before starting new audio.
+ */
+void max98357a_stop_playback(void);
+
+/**
+ * @brief Clear the stop flag so new playback calls work normally.
+ */
+void max98357a_resume_playback(void);
+
 void play_sos(void);
 void play_tetris(void);
 
