@@ -12,8 +12,22 @@ extern "C" {
 
 void is_blue_mode(lv_event_t * e);
 void roza_boja(lv_event_t * e);
-void sos_button_pressed(lv_event_t * e);
 void tetris_music_on(lv_event_t * e);
+void exit_tetris(lv_event_t * e);
+void sos_music_on(lv_event_t * e);
+void d_note_event(lv_event_t * e);
+void c_note_event(lv_event_t * e);
+void e_note_event(lv_event_t * e);
+void f_note_event(lv_event_t * e);
+void g_note_event(lv_event_t * e);
+void a_note_event(lv_event_t * e);
+void c2_note_event(lv_event_t * e);
+void b_note_event(lv_event_t * e);
+void dis_note_event(lv_event_t * e);
+void fis_note_event(lv_event_t * e);
+void gis_note_event(lv_event_t * e);
+void ais_note_event(lv_event_t * e);
+void cis_note_event(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

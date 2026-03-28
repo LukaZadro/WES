@@ -15,6 +15,8 @@ extern void ui_PorukeScreen_screen_init(void);
 extern void ui_PorukeScreen_screen_destroy(void);
 extern lv_obj_t * ui_PorukeScreen;
 extern lv_obj_t * ui_Keyboard1;
+extern void ui_event_ImgButton16(lv_event_t * e);
+extern lv_obj_t * ui_ImgButton16;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

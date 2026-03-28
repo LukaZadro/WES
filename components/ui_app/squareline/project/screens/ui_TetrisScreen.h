@@ -15,6 +15,8 @@ extern void ui_TetrisScreen_screen_init(void);
 extern void ui_TetrisScreen_screen_destroy(void);
 extern lv_obj_t * ui_TetrisScreen;
 extern lv_obj_t * ui_Panel1;
+extern void ui_event_ImgButton15(lv_event_t * e);
+extern lv_obj_t * ui_ImgButton15;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -7,7 +7,16 @@
 
 lv_obj_t * ui_PorukeScreen = NULL;
 lv_obj_t * ui_Keyboard1 = NULL;
+lv_obj_t * ui_ImgButton16 = NULL;
 // event funtions
+void ui_event_ImgButton16(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
+    }
+}
 
 // build funtions
 
@@ -23,6 +32,15 @@ void ui_PorukeScreen_screen_init(void)
     lv_obj_set_y(ui_Keyboard1, 55);
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
 
+    ui_ImgButton16 = lv_imgbtn_create(ui_PorukeScreen);
+    lv_obj_set_width(ui_ImgButton16, 30);
+    lv_obj_set_height(ui_ImgButton16, 30);
+    lv_obj_set_x(ui_ImgButton16, -126);
+    lv_obj_set_y(ui_ImgButton16, -91);
+    lv_obj_set_align(ui_ImgButton16, LV_ALIGN_CENTER);
+
+    lv_obj_add_event_cb(ui_ImgButton16, ui_event_ImgButton16, LV_EVENT_ALL, NULL);
+
 }
 
 void ui_PorukeScreen_screen_destroy(void)
@@ -32,5 +50,6 @@ void ui_PorukeScreen_screen_destroy(void)
     // NULL screen variables
     ui_PorukeScreen = NULL;
     ui_Keyboard1 = NULL;
+    ui_ImgButton16 = NULL;
 
 }

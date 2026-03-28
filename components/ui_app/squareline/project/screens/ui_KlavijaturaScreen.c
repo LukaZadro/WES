@@ -6,7 +6,146 @@
 #include "../ui.h"
 
 lv_obj_t * ui_KlavijaturaScreen = NULL;
+lv_obj_t * ui_DNote = NULL;
+lv_obj_t * ui_CNote = NULL;
+lv_obj_t * ui_ENote = NULL;
+lv_obj_t * ui_FNote = NULL;
+lv_obj_t * ui_GNote = NULL;
+lv_obj_t * ui_ANote = NULL;
+lv_obj_t * ui_C2Note = NULL;
+lv_obj_t * ui_BNote = NULL;
+lv_obj_t * ui_DisNote = NULL;
+lv_obj_t * ui_FisNote = NULL;
+lv_obj_t * ui_GisNote = NULL;
+lv_obj_t * ui_AisNote = NULL;
+lv_obj_t * ui_CisNote = NULL;
+lv_obj_t * ui_ImgButton10 = NULL;
 // event funtions
+void ui_event_DNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        d_note_event(e);
+    }
+}
+
+void ui_event_CNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        c_note_event(e);
+    }
+}
+
+void ui_event_ENote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        e_note_event(e);
+    }
+}
+
+void ui_event_FNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        f_note_event(e);
+    }
+}
+
+void ui_event_GNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        g_note_event(e);
+    }
+}
+
+void ui_event_ANote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        a_note_event(e);
+    }
+}
+
+void ui_event_C2Note(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        c2_note_event(e);
+    }
+}
+
+void ui_event_BNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        b_note_event(e);
+    }
+}
+
+void ui_event_DisNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        dis_note_event(e);
+    }
+}
+
+void ui_event_FisNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        fis_note_event(e);
+    }
+}
+
+void ui_event_GisNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        gis_note_event(e);
+    }
+}
+
+void ui_event_AisNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        ais_note_event(e);
+    }
+}
+
+void ui_event_CisNote(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        cis_note_event(e);
+    }
+}
+
+void ui_event_ImgButton10(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
+    }
+}
 
 // build funtions
 
@@ -14,6 +153,181 @@ void ui_KlavijaturaScreen_screen_init(void)
 {
     ui_KlavijaturaScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_KlavijaturaScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_KlavijaturaScreen, lv_color_hex(0x857E7E), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_KlavijaturaScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_KlavijaturaScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_KlavijaturaScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_DNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_DNote, 40);
+    lv_obj_set_height(ui_DNote, 200);
+    lv_obj_set_x(ui_DNote, -100);
+    lv_obj_set_y(ui_DNote, 40);
+    lv_obj_set_align(ui_DNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_DNote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_DNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_DNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_DNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_DNote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_DNote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_CNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_CNote, 40);
+    lv_obj_set_height(ui_CNote, 200);
+    lv_obj_set_x(ui_CNote, -140);
+    lv_obj_set_y(ui_CNote, 40);
+    lv_obj_set_align(ui_CNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_CNote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_CNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_CNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_CNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_CNote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_CNote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ENote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_ENote, 40);
+    lv_obj_set_height(ui_ENote, 200);
+    lv_obj_set_x(ui_ENote, -60);
+    lv_obj_set_y(ui_ENote, 40);
+    lv_obj_set_align(ui_ENote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ENote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ENote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_ENote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_ENote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_ENote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_ENote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_FNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_FNote, 40);
+    lv_obj_set_height(ui_FNote, 200);
+    lv_obj_set_x(ui_FNote, -20);
+    lv_obj_set_y(ui_FNote, 40);
+    lv_obj_set_align(ui_FNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_FNote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_FNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_FNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_FNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_FNote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_FNote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_GNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_GNote, 40);
+    lv_obj_set_height(ui_GNote, 200);
+    lv_obj_set_x(ui_GNote, 20);
+    lv_obj_set_y(ui_GNote, 40);
+    lv_obj_set_align(ui_GNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_GNote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_GNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_GNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_GNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_GNote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_GNote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ANote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_ANote, 40);
+    lv_obj_set_height(ui_ANote, 200);
+    lv_obj_set_x(ui_ANote, 60);
+    lv_obj_set_y(ui_ANote, 40);
+    lv_obj_set_align(ui_ANote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_ANote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ANote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_ANote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_ANote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_ANote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_ANote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_C2Note = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_C2Note, 40);
+    lv_obj_set_height(ui_C2Note, 200);
+    lv_obj_set_x(ui_C2Note, 140);
+    lv_obj_set_y(ui_C2Note, 40);
+    lv_obj_set_align(ui_C2Note, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_C2Note, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_C2Note, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_C2Note, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_C2Note, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_C2Note, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_C2Note, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_BNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_BNote, 40);
+    lv_obj_set_height(ui_BNote, 200);
+    lv_obj_set_x(ui_BNote, 100);
+    lv_obj_set_y(ui_BNote, 40);
+    lv_obj_set_align(ui_BNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_BNote, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_BNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_BNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_BNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_width(ui_BNote, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_pad(ui_BNote, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_DisNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_DisNote, 25);
+    lv_obj_set_height(ui_DisNote, 100);
+    lv_obj_set_x(ui_DisNote, -80);
+    lv_obj_set_y(ui_DisNote, -10);
+    lv_obj_set_align(ui_DisNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_DisNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_DisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_FisNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_FisNote, 25);
+    lv_obj_set_height(ui_FisNote, 100);
+    lv_obj_set_x(ui_FisNote, 0);
+    lv_obj_set_y(ui_FisNote, -10);
+    lv_obj_set_align(ui_FisNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_FisNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_FisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_GisNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_GisNote, 25);
+    lv_obj_set_height(ui_GisNote, 100);
+    lv_obj_set_x(ui_GisNote, 40);
+    lv_obj_set_y(ui_GisNote, -10);
+    lv_obj_set_align(ui_GisNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_GisNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_GisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_AisNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_AisNote, 25);
+    lv_obj_set_height(ui_AisNote, 100);
+    lv_obj_set_x(ui_AisNote, 80);
+    lv_obj_set_y(ui_AisNote, -10);
+    lv_obj_set_align(ui_AisNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_AisNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_AisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_CisNote = lv_btn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_CisNote, 25);
+    lv_obj_set_height(ui_CisNote, 100);
+    lv_obj_set_x(ui_CisNote, -120);
+    lv_obj_set_y(ui_CisNote, -10);
+    lv_obj_set_align(ui_CisNote, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_CisNote, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_CisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ImgButton10 = lv_imgbtn_create(ui_KlavijaturaScreen);
+    lv_obj_set_width(ui_ImgButton10, 30);
+    lv_obj_set_height(ui_ImgButton10, 30);
+    lv_obj_set_x(ui_ImgButton10, -139);
+    lv_obj_set_y(ui_ImgButton10, -100);
+    lv_obj_set_align(ui_ImgButton10, LV_ALIGN_CENTER);
+
+    lv_obj_add_event_cb(ui_DNote, ui_event_DNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_CNote, ui_event_CNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ENote, ui_event_ENote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FNote, ui_event_FNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_GNote, ui_event_GNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ANote, ui_event_ANote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_C2Note, ui_event_C2Note, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_BNote, ui_event_BNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_DisNote, ui_event_DisNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FisNote, ui_event_FisNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_GisNote, ui_event_GisNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_AisNote, ui_event_AisNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_CisNote, ui_event_CisNote, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ImgButton10, ui_event_ImgButton10, LV_EVENT_ALL, NULL);
 
 }
 
@@ -23,5 +337,19 @@ void ui_KlavijaturaScreen_screen_destroy(void)
 
     // NULL screen variables
     ui_KlavijaturaScreen = NULL;
+    ui_DNote = NULL;
+    ui_CNote = NULL;
+    ui_ENote = NULL;
+    ui_FNote = NULL;
+    ui_GNote = NULL;
+    ui_ANote = NULL;
+    ui_C2Note = NULL;
+    ui_BNote = NULL;
+    ui_DisNote = NULL;
+    ui_FisNote = NULL;
+    ui_GisNote = NULL;
+    ui_AisNote = NULL;
+    ui_CisNote = NULL;
+    ui_ImgButton10 = NULL;
 
 }

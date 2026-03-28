@@ -7,8 +7,16 @@
 
 lv_obj_t * ui_MemoryScreen = NULL;
 lv_obj_t * ui_Panel2 = NULL;
-lv_obj_t * ui_ImgButton8 = NULL;
+lv_obj_t * ui_ImgButton17 = NULL;
 // event funtions
+void ui_event_ImgButton17(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
+    }
+}
 
 // build funtions
 
@@ -18,17 +26,19 @@ void ui_MemoryScreen_screen_init(void)
     lv_obj_clear_flag(ui_MemoryScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_Panel2 = lv_obj_create(ui_MemoryScreen);
-    lv_obj_set_width(ui_Panel2, 270);
-    lv_obj_set_height(ui_Panel2, 195);
+    lv_obj_set_width(ui_Panel2, 240);
+    lv_obj_set_height(ui_Panel2, 180);
     lv_obj_set_align(ui_Panel2, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_Panel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_ImgButton8 = lv_imgbtn_create(ui_MemoryScreen);
-    lv_obj_set_width(ui_ImgButton8, 347);
-    lv_obj_set_height(ui_ImgButton8, 373);
-    lv_obj_set_x(ui_ImgButton8, -146);
-    lv_obj_set_y(ui_ImgButton8, -105);
-    lv_obj_set_align(ui_ImgButton8, LV_ALIGN_CENTER);
+    ui_ImgButton17 = lv_imgbtn_create(ui_MemoryScreen);
+    lv_obj_set_width(ui_ImgButton17, 30);
+    lv_obj_set_height(ui_ImgButton17, 30);
+    lv_obj_set_x(ui_ImgButton17, -142);
+    lv_obj_set_y(ui_ImgButton17, -97);
+    lv_obj_set_align(ui_ImgButton17, LV_ALIGN_CENTER);
+
+    lv_obj_add_event_cb(ui_ImgButton17, ui_event_ImgButton17, LV_EVENT_ALL, NULL);
 
 }
 
@@ -39,6 +49,6 @@ void ui_MemoryScreen_screen_destroy(void)
     // NULL screen variables
     ui_MemoryScreen = NULL;
     ui_Panel2 = NULL;
-    ui_ImgButton8 = NULL;
+    ui_ImgButton17 = NULL;
 
 }

@@ -50,7 +50,6 @@ void ui_event_SOS(lv_event_t * e)
 
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_SOSScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_SOSScreen_screen_init);
-        sos_button_pressed(e);
     }
 }
 
@@ -96,10 +95,10 @@ void ui_HomePage_screen_init(void)
     ui_Label1 = lv_label_create(ui_HomePage);
     lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label1, 119);
-    lv_obj_set_y(ui_Label1, 111);
+    lv_obj_set_x(ui_Label1, 116);
+    lv_obj_set_y(ui_Label1, 112);
     lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label1, "Plava/Roza");
+    lv_label_set_text(ui_Label1, "Decko/Cura");
 
     ui_Poruke = lv_btn_create(ui_HomePage);
     lv_obj_set_width(ui_Poruke, 80);
@@ -119,7 +118,7 @@ void ui_HomePage_screen_init(void)
 
     ui_SOS = lv_btn_create(ui_HomePage);
     lv_obj_set_width(ui_SOS, 30);
-    lv_obj_set_height(ui_SOS, 24);
+    lv_obj_set_height(ui_SOS, 30);
     lv_obj_set_x(ui_SOS, -135);
     lv_obj_set_y(ui_SOS, 95);
     lv_obj_set_align(ui_SOS, LV_ALIGN_CENTER);

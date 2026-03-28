@@ -14,6 +14,34 @@ extern "C" {
 extern void ui_KlavijaturaScreen_screen_init(void);
 extern void ui_KlavijaturaScreen_screen_destroy(void);
 extern lv_obj_t * ui_KlavijaturaScreen;
+extern void ui_event_DNote(lv_event_t * e);
+extern lv_obj_t * ui_DNote;
+extern void ui_event_CNote(lv_event_t * e);
+extern lv_obj_t * ui_CNote;
+extern void ui_event_ENote(lv_event_t * e);
+extern lv_obj_t * ui_ENote;
+extern void ui_event_FNote(lv_event_t * e);
+extern lv_obj_t * ui_FNote;
+extern void ui_event_GNote(lv_event_t * e);
+extern lv_obj_t * ui_GNote;
+extern void ui_event_ANote(lv_event_t * e);
+extern lv_obj_t * ui_ANote;
+extern void ui_event_C2Note(lv_event_t * e);
+extern lv_obj_t * ui_C2Note;
+extern void ui_event_BNote(lv_event_t * e);
+extern lv_obj_t * ui_BNote;
+extern void ui_event_DisNote(lv_event_t * e);
+extern lv_obj_t * ui_DisNote;
+extern void ui_event_FisNote(lv_event_t * e);
+extern lv_obj_t * ui_FisNote;
+extern void ui_event_GisNote(lv_event_t * e);
+extern lv_obj_t * ui_GisNote;
+extern void ui_event_AisNote(lv_event_t * e);
+extern lv_obj_t * ui_AisNote;
+extern void ui_event_CisNote(lv_event_t * e);
+extern lv_obj_t * ui_CisNote;
+extern void ui_event_ImgButton10(lv_event_t * e);
+extern lv_obj_t * ui_ImgButton10;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -59,3 +59,78 @@ void is_blue_mode(lv_event_t * e)
 {
 	// Your code here
 }
+
+void sos_music_on(lv_event_t * e)
+{
+	// Your code here
+}
+
+void d_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void c_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void e_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void f_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void g_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void a_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void c2_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void b_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void dis_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void fis_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void gis_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void ais_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void cis_note_event(lv_event_t * e)
+{
+	// Your code here
+}
+
+void exit_tetris(lv_event_t * e)
+{
+	// Your code here
+}

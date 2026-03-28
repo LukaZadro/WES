@@ -7,7 +7,17 @@
 
 lv_obj_t * ui_TetrisScreen = NULL;
 lv_obj_t * ui_Panel1 = NULL;
+lv_obj_t * ui_ImgButton15 = NULL;
 // event funtions
+void ui_event_ImgButton15(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
+        exit_tetris(e);
+    }
+}
 
 // build funtions
 
@@ -22,6 +32,15 @@ void ui_TetrisScreen_screen_init(void)
     lv_obj_set_align(ui_Panel1, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_Panel1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    ui_ImgButton15 = lv_imgbtn_create(ui_TetrisScreen);
+    lv_obj_set_width(ui_ImgButton15, 30);
+    lv_obj_set_height(ui_ImgButton15, 30);
+    lv_obj_set_x(ui_ImgButton15, -128);
+    lv_obj_set_y(ui_ImgButton15, -92);
+    lv_obj_set_align(ui_ImgButton15, LV_ALIGN_CENTER);
+
+    lv_obj_add_event_cb(ui_ImgButton15, ui_event_ImgButton15, LV_EVENT_ALL, NULL);
+
 }
 
 void ui_TetrisScreen_screen_destroy(void)
@@ -31,5 +50,6 @@ void ui_TetrisScreen_screen_destroy(void)
     // NULL screen variables
     ui_TetrisScreen = NULL;
     ui_Panel1 = NULL;
+    ui_ImgButton15 = NULL;
 
 }
