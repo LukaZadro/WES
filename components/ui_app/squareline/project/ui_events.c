@@ -22,13 +22,11 @@ static volatile bool _sos_running     = false;
 void is_blue_mode(lv_event_t * e)
 {
     (void)e;
-    /* Only act when the switch is NOT checked (blue/boy mode) */
+    /* Only act when the switch is NOT checked (blue/Ben10 mode) */
     if (ui_ColorSwitch && lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED))
         return;
 
     lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_527192083,
-                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_opa(ui_HomePage, LV_OPA_COVER,
                                 LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0x88BADC),
                               LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -74,9 +72,6 @@ static void _tetris_task(void *arg)
             max98357a_play_raw(silence, sizeof(silence), 200);
     }
 
-    /* Cut DMA output from this task — safe to call here because we are
-     * no longer inside i2s_channel_write, so no lock contention. */
-    max98357a_cut_audio();
     _tetris_task_hdl = NULL;
     vTaskDelete(NULL);
 }
@@ -153,7 +148,6 @@ static void _sos_task(void *arg)
         _sos_delay(1000);
     }
 
-    max98357a_cut_audio();
     _sos_task_hdl = NULL;
     vTaskDelete(NULL);
 
@@ -205,11 +199,7 @@ static void _piano_worker(void *arg)
 
             max98357a_resume_playback();
             max98357a_play_tone(latest, 350, 80);
-<<<<<<< HEAD
             max98357a_stop_playback();
-=======
-            max98357a_cut_audio();  /* silence DMA after note — prevents residual buzz */
->>>>>>> 9006a62 (svi gumbovi i joystick rade)
         }
     }
 }
