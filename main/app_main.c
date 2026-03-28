@@ -91,28 +91,28 @@ static void _button_task(void *arg)
 
 static void _joystick_event_cb(joystick_pos_t pos)
 {
-    static uint32_t prev_key = 0;
+    static uint32_t prev_dir = 0;
 
     int16_t ax = pos.x < 0 ? -pos.x : pos.x;
     int16_t ay = pos.y < 0 ? -pos.y : pos.y;
 
-    uint32_t key = 0;
+    uint32_t dir = 0;
 
     if (ax > ay) {
-        /* X axis dominates */
-        if      (pos.x >  JOY_THRESHOLD) key = LV_KEY_NEXT;
-        else if (pos.x < -JOY_THRESHOLD) key = LV_KEY_PREV;
+        /* X axis dominates — hardware is mounted with X inverted, so swap */
+        if      (pos.x >  JOY_THRESHOLD) dir = LV_KEY_LEFT;
+        else if (pos.x < -JOY_THRESHOLD) dir = LV_KEY_RIGHT;
     } else {
         /* Y axis dominates */
-        if      (pos.y >  JOY_THRESHOLD) key = LV_KEY_NEXT;
-        else if (pos.y < -JOY_THRESHOLD) key = LV_KEY_PREV;
+        if      (pos.y >  JOY_THRESHOLD) dir = LV_KEY_DOWN;
+        else if (pos.y < -JOY_THRESHOLD) dir = LV_KEY_UP;
     }
 
-    if (key != prev_key) {
-        if (prev_key != 0) nav_send_key(prev_key, LV_INDEV_STATE_REL);
-        if (key      != 0) nav_send_key(key,      LV_INDEV_STATE_PR);
-        prev_key = key;
-    }
+    /* Fire spatial navigation once per new direction (no auto-repeat spam) */
+    if (dir != 0 && dir != prev_dir)
+        nav_move_dir(dir);
+
+    prev_dir = dir;
 }
 
 /* ------------------------------------------------------------------ */

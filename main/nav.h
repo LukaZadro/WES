@@ -22,3 +22,11 @@ void nav_send_key(uint32_t key, lv_indev_state_t state);
  *        Thread-safe: may be called from any FreeRTOS task.
  */
 void nav_go_back(void);
+
+/**
+ * @brief Move focus to the nearest widget in the given direction using
+ *        absolute screen coordinates (spatial navigation).
+ *        Pass LV_KEY_RIGHT, LV_KEY_LEFT, LV_KEY_UP, or LV_KEY_DOWN.
+ *        Thread-safe: may be called from any FreeRTOS task.
+ */
+void nav_move_dir(uint32_t dir);

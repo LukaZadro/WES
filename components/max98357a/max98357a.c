@@ -299,7 +299,21 @@ static void _sd_mode_gpio_init(int gpio_num)
 
 void max98357a_stop_playback(void)
 {
+    if(!s_initialised || !s_tx_chan) return;
+
+    /* Signal any ongoing play_raw to abort at the next chunk boundary */
     s_stop_requested = true;
+
+    /* Disable the I2S channel immediately — cuts audio output and stops
+     * the DMA from looping the last buffer.
+     * Re-enable so the channel is ready for the next sound. */
+    i2s_channel_disable(s_tx_chan);
+    i2s_channel_enable(s_tx_chan);
+
+    /* NOTE: s_stop_requested is left TRUE here.
+     * Callers must call max98357a_resume_playback() before starting
+     * new audio.  This prevents any still-running task from sneaking
+     * a write through the freshly re-enabled channel. */
 }
 
 void max98357a_resume_playback(void)
