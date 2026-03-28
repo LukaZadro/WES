@@ -3,6 +3,7 @@
 #include "max98357a.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "ui_app/tetris_ui_draw.h"
 
 void plava_boja(lv_event_t * e)
 {
@@ -25,7 +26,7 @@ static void _tetris_task(void *arg)
 
     while(1)
     {
-        play_tetris();
+        //play_tetris();
         for(uint32_t i = 0; i < silence_loops; i++)
             max98357a_play_raw(silence, sizeof(silence), 1000);
     }
@@ -54,6 +55,8 @@ void sos_button_pressed(lv_event_t * e)
 
 void tetris_music_on(lv_event_t * e)
 {
+    setup_tetris_ui();
+    
     lv_event_code_t event_code = lv_event_get_code(e);
     if(event_code == LV_EVENT_CLICKED)
     {
@@ -138,10 +141,11 @@ void cis_note_event(lv_event_t * e)
 
 void exit_tetris(lv_event_t * e)
 {
-	// Your code here
+	destroy_tetris_ui();
 }
 
 void sos_music_off(lv_event_t * e)
 {
 	// Your code here
 }
+

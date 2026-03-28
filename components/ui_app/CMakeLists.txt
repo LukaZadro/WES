@@ -25,7 +25,7 @@ endforeach()
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 
 idf_component_register(
-    SRCS "ui_app.c" ${SQUARELINE_SRCS}
+    SRCS "ui_app.c" "tetris_ui_draw.c" ${SQUARELINE_SRCS}
     INCLUDE_DIRS ${INCLUDE_DIRS}
-    REQUIRES lvgl lvgl_esp32_drivers max98357a freertos
+    REQUIRES lvgl lvgl_esp32_drivers max98357a freertos tetris
 )
