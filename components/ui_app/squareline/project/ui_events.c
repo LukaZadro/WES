@@ -140,3 +140,8 @@ void exit_tetris(lv_event_t * e)
 {
 	// Your code here
 }
+
+void sos_music_off(lv_event_t * e)
+{
+	// Your code here
+}

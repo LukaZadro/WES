@@ -16,8 +16,6 @@ extern void ui_SOSScreen_screen_destroy(void);
 extern lv_obj_t * ui_SOSScreen;
 extern void ui_event_GumbSOS(lv_event_t * e);
 extern lv_obj_t * ui_GumbSOS;
-extern void ui_event_ImgButton14(lv_event_t * e);
-extern lv_obj_t * ui_ImgButton14;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

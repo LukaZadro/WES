@@ -27,6 +27,11 @@ extern void ui_event_Tetris(lv_event_t * e);
 extern lv_obj_t * ui_Tetris;
 extern void ui_event_Klavijatura(lv_event_t * e);
 extern lv_obj_t * ui_Klavijatura;
+extern lv_obj_t * ui_Image2;
+extern lv_obj_t * ui_Image3;
+extern lv_obj_t * ui_Image4;
+extern lv_obj_t * ui_Image5;
+extern lv_obj_t * ui_Image6;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

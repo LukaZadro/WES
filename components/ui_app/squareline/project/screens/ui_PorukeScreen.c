@@ -33,10 +33,11 @@ void ui_PorukeScreen_screen_init(void)
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
 
     ui_ImgButton16 = lv_imgbtn_create(ui_PorukeScreen);
+    lv_imgbtn_set_src(ui_ImgButton16, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
     lv_obj_set_width(ui_ImgButton16, 30);
     lv_obj_set_height(ui_ImgButton16, 30);
-    lv_obj_set_x(ui_ImgButton16, -126);
-    lv_obj_set_y(ui_ImgButton16, -91);
+    lv_obj_set_x(ui_ImgButton16, -140);
+    lv_obj_set_y(ui_ImgButton16, -100);
     lv_obj_set_align(ui_ImgButton16, LV_ALIGN_CENTER);
 
     lv_obj_add_event_cb(ui_ImgButton16, ui_event_ImgButton16, LV_EVENT_ALL, NULL);
