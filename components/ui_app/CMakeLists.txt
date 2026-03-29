@@ -27,5 +27,5 @@ list(REMOVE_DUPLICATES INCLUDE_DIRS)
 idf_component_register(
     SRCS "ui_app.c" "tetris_ui_draw.c" "memory_ui_draw.c" ${SQUARELINE_SRCS}
     INCLUDE_DIRS ${INCLUDE_DIRS}
-    REQUIRES lvgl lvgl_esp32_drivers max98357a freertos tetris mqtt_client_bl memory
+    REQUIRES lvgl lvgl_esp32_drivers max98357a freertos tetris mqtt_client_bl memory step_counter
 )

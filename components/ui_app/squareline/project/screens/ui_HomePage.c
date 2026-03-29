@@ -5,6 +5,7 @@
 
 #include "../ui.h"
 #include <stdio.h>
+#include "step_counter.h"
 
 lv_obj_t * ui_HomePage = NULL;
 lv_obj_t * ui_ColorSwitch = NULL;
@@ -21,6 +22,7 @@ lv_obj_t * ui_Image5 = NULL;
 lv_obj_t * ui_Image6 = NULL;
 lv_obj_t * ui_Image1 = NULL;
 lv_obj_t * ui_PorukeBadge = NULL;
+static lv_obj_t * _step_label = NULL;
 // event funtions
 void ui_event_ColorSwitch(lv_event_t * e)
 {
@@ -87,6 +89,15 @@ void ui_event_Klavijatura(lv_event_t * e)
 }
 
 // build funtions
+
+static void _step_timer_cb(lv_timer_t *t)
+{
+    (void)t;
+    if (!_step_label) return;
+    char buf[24];
+    snprintf(buf, sizeof(buf), "%lu koraka", (unsigned long)step_counter_get());
+    lv_label_set_text(_step_label, buf);
+}
 
 void ui_HomePage_screen_init(void)
 {
@@ -228,6 +239,13 @@ void ui_HomePage_screen_init(void)
     lv_obj_center(badge_lbl);
     ui_update_poruke_badge(poruke_get_unread());
 
+    /* Step counter — top-right corner */
+    _step_label = lv_label_create(ui_HomePage);
+    lv_label_set_text(_step_label, "0 koraka");
+    lv_obj_set_style_text_color(_step_label, lv_color_white(), 0);
+    lv_obj_align(_step_label, LV_ALIGN_TOP_RIGHT, -4, 4);
+    lv_timer_create(_step_timer_cb, 1000, NULL);
+
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Memory, ui_event_Memory, LV_EVENT_ALL, NULL);
@@ -273,5 +291,5 @@ void ui_HomePage_screen_destroy(void)
     ui_Image6 = NULL;
     ui_Image1 = NULL;
     ui_PorukeBadge = NULL;
-
+    _step_label    = NULL;
 }
