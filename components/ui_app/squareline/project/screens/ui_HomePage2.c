@@ -18,6 +18,7 @@ lv_obj_t * ui_Image7 = NULL;
 lv_obj_t * ui_Image8 = NULL;
 lv_obj_t * ui_Image9 = NULL;
 lv_obj_t * ui_Image10 = NULL;
+static lv_obj_t * ui_PrevPageBtn = NULL;
 // event funtions
 void ui_event_ColorSwitch1(lv_event_t * e)
 {
@@ -197,6 +198,32 @@ void ui_HomePage2_screen_init(void)
     lv_obj_add_flag(ui_Image10, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image10, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    /* Back button (←) — bottom left, symmetric to SOS */
+    ui_PrevPageBtn = lv_btn_create(ui_HomePage2);
+    lv_obj_set_size(ui_PrevPageBtn, 40, 40);
+    lv_obj_set_x(ui_PrevPageBtn, 135);
+    lv_obj_set_y(ui_PrevPageBtn, 95);
+    lv_obj_set_align(ui_PrevPageBtn, LV_ALIGN_CENTER);
+    lv_obj_set_style_radius(ui_PrevPageBtn, 20, 0);
+    lv_obj_set_style_bg_color(ui_PrevPageBtn, lv_color_hex(0x333333), 0);
+    lv_obj_t *prev_lbl = lv_label_create(ui_PrevPageBtn);
+    lv_label_set_text(prev_lbl, LV_SYMBOL_LEFT);
+    lv_obj_center(prev_lbl);
+    lv_obj_add_event_cb(ui_PrevPageBtn, ui_event_PrevPage, LV_EVENT_ALL, NULL);
+
+    /* Apply correct background based on current colour mode */
+    if(ui_is_pink_mode())
+    {
+        lv_obj_set_style_bg_img_src(ui_HomePage2, &ui_img_wp2844947_png,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_img_opa(ui_HomePage2, LV_OPA_COVER,
+                                    LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(ui_HomePage2, lv_color_hex(0xFF69B4),
+                                  LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(ui_HomePage2, LV_OPA_TRANSP,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    }
+
     lv_obj_add_event_cb(ui_ColorSwitch1, ui_event_ColorSwitch1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Koraci, ui_event_Koraci, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Temperatura, ui_event_Temperatura, LV_EVENT_ALL, NULL);
@@ -224,5 +251,6 @@ void ui_HomePage2_screen_destroy(void)
     ui_Image8 = NULL;
     ui_Image9 = NULL;
     ui_Image10 = NULL;
+    ui_PrevPageBtn = NULL;
 
 }

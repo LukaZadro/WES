@@ -12,6 +12,9 @@ extern "C" {
 
 void is_blue_mode(lv_event_t * e);
 void roza_boja(lv_event_t * e);
+bool ui_is_pink_mode(void);
+void ui_event_NextPage(lv_event_t * e);
+void ui_event_PrevPage(lv_event_t * e);
 void memory_start(lv_event_t * e);
 void sos_music_on(lv_event_t * e);
 void tetris_music_on(lv_event_t * e);

@@ -20,38 +20,68 @@ static volatile bool _sos_running     = false;
 /*  Color switch – Ben10 (blue/boy) vs. pink (girl) mode              */
 /* ------------------------------------------------------------------ */
 
+/* Persists across screen changes so page 2 opens with the right bg. */
+static bool s_pink_mode = false;
+
+bool ui_is_pink_mode(void) { return s_pink_mode; }
+
+static void _apply_blue(lv_obj_t *screen)
+{
+    if(!screen) return;
+    lv_obj_set_style_bg_img_src(screen, &ui_img_527192083,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(screen, lv_color_hex(0x88BADC),
+                              LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+static void _apply_pink(lv_obj_t *screen)
+{
+    if(!screen) return;
+    lv_obj_set_style_bg_img_src(screen, &ui_img_wp2844947_png,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_opa(screen, LV_OPA_COVER,
+                                LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor_opa(screen, LV_OPA_TRANSP,
+                                        LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(screen, lv_color_hex(0xFF69B4),
+                              LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(screen, LV_OPA_TRANSP,
+                            LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
 void is_blue_mode(lv_event_t * e)
 {
     (void)e;
-    /* Only act when the switch is NOT checked (blue/Ben10 mode) */
     if (ui_ColorSwitch && lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED))
         return;
-
-    lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_527192083,
-                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0x88BADC),
-                              LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_HomePage, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    s_pink_mode = false;
+    _apply_blue(ui_HomePage);
+    _apply_blue(ui_HomePage2);
 }
 
 void roza_boja(lv_event_t * e)
 {
     (void)e;
-    /* Only act when the switch IS checked (pink/Barbie mode) */
     if (ui_ColorSwitch && !lv_obj_has_state(ui_ColorSwitch, LV_STATE_CHECKED))
         return;
+    s_pink_mode = true;
+    _apply_pink(ui_HomePage);
+    _apply_pink(ui_HomePage2);
+}
 
-    /* Apply original image asset from images for pink mode */
-    lv_obj_set_style_bg_img_src(ui_HomePage, &ui_img_wp2844947_png,
-                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_opa(ui_HomePage, LV_OPA_COVER,
-                                LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_recolor_opa(ui_HomePage, LV_OPA_TRANSP,
-                                        LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_HomePage, lv_color_hex(0xFF69B4),
-                              LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_HomePage, LV_OPA_TRANSP,
-                            LV_PART_MAIN | LV_STATE_DEFAULT);
+void ui_event_NextPage(lv_event_t * e)
+{
+    if(lv_event_get_code(e) == LV_EVENT_CLICKED)
+        _ui_screen_change(&ui_HomePage2, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0,
+                          &ui_HomePage2_screen_init);
+}
+
+void ui_event_PrevPage(lv_event_t * e)
+{
+    if(lv_event_get_code(e) == LV_EVENT_CLICKED)
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0,
+                          &ui_HomePage_screen_init);
 }
 
 /* ------------------------------------------------------------------ */

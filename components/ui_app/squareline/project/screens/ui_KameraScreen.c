@@ -27,6 +27,7 @@ void ui_KameraScreen_screen_init(void)
     lv_obj_set_style_bg_img_src(ui_KameraScreen, &ui_img_527192083, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ImgButton4 = lv_imgbtn_create(ui_KameraScreen);
+    lv_imgbtn_set_src(ui_ImgButton4, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
     lv_obj_set_width(ui_ImgButton4, 30);
     lv_obj_set_height(ui_ImgButton4, 30);
     lv_obj_set_x(ui_ImgButton4, -140);

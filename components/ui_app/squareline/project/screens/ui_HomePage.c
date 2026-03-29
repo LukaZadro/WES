@@ -21,6 +21,7 @@ lv_obj_t * ui_Image5 = NULL;
 lv_obj_t * ui_Image6 = NULL;
 lv_obj_t * ui_ImageBg1 = NULL;
 lv_obj_t * ui_PorukeBadge = NULL;
+static lv_obj_t * ui_NextPageBtn = NULL;
 // event funtions
 void ui_event_ColorSwitch(lv_event_t * e)
 {
@@ -225,6 +226,19 @@ void ui_HomePage_screen_init(void)
     lv_obj_center(badge_lbl);
     ui_update_poruke_badge(poruke_get_unread());
 
+    /* Next page button (→) — bottom right */
+    ui_NextPageBtn = lv_btn_create(ui_HomePage);
+    lv_obj_set_size(ui_NextPageBtn, 40, 40);
+    lv_obj_set_x(ui_NextPageBtn, 135);
+    lv_obj_set_y(ui_NextPageBtn, 95);
+    lv_obj_set_align(ui_NextPageBtn, LV_ALIGN_CENTER);
+    lv_obj_set_style_radius(ui_NextPageBtn, 20, 0);
+    lv_obj_set_style_bg_color(ui_NextPageBtn, lv_color_hex(0x333333), 0);
+    lv_obj_t *next_lbl = lv_label_create(ui_NextPageBtn);
+    lv_label_set_text(next_lbl, LV_SYMBOL_RIGHT);
+    lv_obj_center(next_lbl);
+    lv_obj_add_event_cb(ui_NextPageBtn, ui_event_NextPage, LV_EVENT_ALL, NULL);
+
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Memory, ui_event_Memory, LV_EVENT_ALL, NULL);
@@ -270,5 +284,6 @@ void ui_HomePage_screen_destroy(void)
     ui_Image6 = NULL;
     ui_ImageBg1 = NULL;
     ui_PorukeBadge = NULL;
+    ui_NextPageBtn = NULL;
 
 }

@@ -8,6 +8,11 @@
 lv_obj_t * ui_VoiceChangerScreen = NULL;
 lv_obj_t * ui_ImgButton3 = NULL;
 // event funtions
+static void ui_event_ImgButton3(lv_event_t * e)
+{
+    if(lv_event_get_code(e) == LV_EVENT_CLICKED)
+        _ui_screen_change(&ui_HomePage2, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage2_screen_init);
+}
 
 // build funtions
 
@@ -18,11 +23,13 @@ void ui_VoiceChangerScreen_screen_init(void)
     lv_obj_set_style_bg_img_src(ui_VoiceChangerScreen, &ui_img_527192083, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ImgButton3 = lv_imgbtn_create(ui_VoiceChangerScreen);
+    lv_imgbtn_set_src(ui_ImgButton3, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
     lv_obj_set_width(ui_ImgButton3, 30);
     lv_obj_set_height(ui_ImgButton3, 30);
     lv_obj_set_x(ui_ImgButton3, -140);
     lv_obj_set_y(ui_ImgButton3, -100);
     lv_obj_set_align(ui_ImgButton3, LV_ALIGN_CENTER);
+    lv_obj_add_event_cb(ui_ImgButton3, ui_event_ImgButton3, LV_EVENT_ALL, NULL);
 
 }
 
