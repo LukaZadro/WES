@@ -3,6 +3,7 @@
 #include "nav.h"
 #include "max98357a.h"
 #include "ui_app/tetris_ui_draw.h"
+#include "ui_app/memory_ui_draw.h"
 #include "wifi_station.h"
 #include "mqtt_client_bl.h"
 #include "buttons.h"
@@ -71,10 +72,15 @@ static void _button_task(void *arg)
                 case BUTTON_3:
                     break;
                 case BUTTON_4:
-                    /* Select / Enter — press or release the focused widget */
-                    nav_send_key(LV_KEY_ENTER,
-                                 evt.pressed ? LV_INDEV_STATE_PR
-                                             : LV_INDEV_STATE_REL);
+                    if (evt.pressed) {
+                        if (lv_scr_act() == ui_MemoryScreen)
+                            memory_ui_select();
+                        else
+                            nav_send_key(LV_KEY_ENTER, LV_INDEV_STATE_PR);
+                    } else {
+                        if (lv_scr_act() != ui_MemoryScreen)
+                            nav_send_key(LV_KEY_ENTER, LV_INDEV_STATE_REL);
+                    }
                     break;
                 default:
                     break;
@@ -113,6 +119,15 @@ static void _joystick_event_cb(joystick_pos_t pos)
     if (dir != 0) sleep_timer_reset();
 
     bool moved = false;
+
+    if (dir != 0 && lv_scr_act() == ui_MemoryScreen) {
+        /* Memory screen: move cursor, no auto-repeat */
+        if (dir != prev_dir)
+            memory_ui_joystick(dir);
+        prev_dir = dir;
+        return;
+    }
+
     switch (dir) {
         case 0:
             break;

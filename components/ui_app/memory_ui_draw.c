@@ -11,6 +11,10 @@
 
 memory_game_t *memory_game = NULL;
 
+/* Joystick cursor */
+static int _cur_col = 0;
+static int _cur_row = 0;
+
 static void ui_event_draw_memory_board(lv_event_t * e)
 {
     memory_game_t *game = memory_game;
@@ -61,6 +65,23 @@ static void ui_event_draw_memory_board(lv_event_t * e)
                 lv_draw_rect(draw_ctx, &card_dsc, &card_area);
             }
         }
+    }
+
+    /* Draw cursor highlight on the active cell */
+    {
+        lv_draw_rect_dsc_t cur_dsc;
+        lv_draw_rect_dsc_init(&cur_dsc);
+        cur_dsc.bg_opa      = LV_OPA_TRANSP;
+        cur_dsc.border_width = 3;
+        cur_dsc.border_color = lv_color_white();
+        cur_dsc.radius       = CARD_RADIUS;
+
+        lv_area_t cur_area;
+        cur_area.x1 = obj->coords.x1 + (_cur_col * cell_w) + CARD_MARGIN;
+        cur_area.y1 = obj->coords.y1 + (_cur_row * cell_h) + CARD_MARGIN;
+        cur_area.x2 = cur_area.x1 + cell_w - (CARD_MARGIN * 2);
+        cur_area.y2 = cur_area.y1 + cell_h - (CARD_MARGIN * 2);
+        lv_draw_rect(draw_ctx, &cur_dsc, &cur_area);
     }
 }
 
@@ -134,4 +155,54 @@ void destroy_memory_ui(void) {
 
     lv_mem_free(memory_game);
     memory_game = NULL;
+
+    /* Reset cursor for next game */
+    _cur_col = 0;
+    _cur_row = 0;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Joystick navigation                                                 */
+/* ------------------------------------------------------------------ */
+
+static void _invalidate_cb(void *arg)
+{
+    (void)arg;
+    if (ui_Container1 != NULL) lv_obj_invalidate(ui_Container1);
+}
+
+static void _select_cb(void *arg)
+{
+    (void)arg;
+    memory_game_t *game = memory_game;
+    if (game == NULL) return;
+    if (memory_reveal(game, (card_point_t){ .x = _cur_col, .y = _cur_row })) {
+        if (ui_Container1 != NULL) lv_obj_invalidate(ui_Container1);
+    }
+}
+
+void memory_ui_joystick(uint32_t lv_key)
+{
+    switch (lv_key) {
+        case LV_KEY_LEFT:
+            _cur_col = (_cur_col - 1 + CARD_COLUMNS) % CARD_COLUMNS;
+            break;
+        case LV_KEY_RIGHT:
+            _cur_col = (_cur_col + 1) % CARD_COLUMNS;
+            break;
+        case LV_KEY_UP:
+            _cur_row = (_cur_row - 1 + CARD_ROWS) % CARD_ROWS;
+            break;
+        case LV_KEY_DOWN:
+            _cur_row = (_cur_row + 1) % CARD_ROWS;
+            break;
+        default:
+            return;
+    }
+    lv_async_call(_invalidate_cb, NULL);
+}
+
+void memory_ui_select(void)
+{
+    lv_async_call(_select_cb, NULL);
 }
