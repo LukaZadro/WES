@@ -219,9 +219,12 @@ void nav_init(void)
     }
 
     /* ---- PorukeScreen ---- */
+    /* Group order: back button → text area → keyboard (keyboard hidden until tapped) */
     lv_group_add_obj(_group_poruke, ui_BackButtonMsg);
+    lv_group_add_obj(_group_poruke, ui_TextArea1);
     lv_group_add_obj(_group_poruke, ui_Keyboard1);
     _apply_focus_style(ui_BackButtonMsg);
+    _apply_focus_style(ui_TextArea1);
     _apply_focus_style(ui_Keyboard1);
 
     /* ---- TetrisScreen ---- */

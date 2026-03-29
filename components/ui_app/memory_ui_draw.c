@@ -13,8 +13,9 @@
 memory_game_t *memory_game = NULL;
 
 /* Joystick cursor */
-static int _cur_col = 0;
-static int _cur_row = 0;
+static int  _cur_col     = 0;
+static int  _cur_row     = 0;
+static bool _grid_active = false;  /* false = focus is on back button */
 
 static void ui_event_draw_memory_board(lv_event_t * e)
 {
@@ -68,8 +69,8 @@ static void ui_event_draw_memory_board(lv_event_t * e)
         }
     }
 
-    /* Draw cursor highlight on the active cell */
-    {
+    /* Draw cursor highlight on the active cell (only when grid has focus) */
+    if (_grid_active) {
         lv_draw_rect_dsc_t cur_dsc;
         lv_draw_rect_dsc_init(&cur_dsc);
         cur_dsc.bg_opa      = LV_OPA_TRANSP;
@@ -156,8 +157,9 @@ void destroy_memory_ui(void) {
     memory_game = NULL;
 
     /* Reset cursor for next game */
-    _cur_col = 0;
-    _cur_row = 0;
+    _cur_col     = 0;
+    _cur_row     = 0;
+    _grid_active = false;
 }
 
 /* ------------------------------------------------------------------ */
@@ -180,8 +182,19 @@ static void _select_cb(void *arg)
     }
 }
 
-void memory_ui_joystick(uint32_t lv_key)
+bool memory_ui_joystick(uint32_t lv_key)
 {
+    if (!_grid_active) {
+        /* Grid doesn't have focus yet — only DOWN enters the grid */
+        if (lv_key == LV_KEY_DOWN) {
+            _grid_active = true;
+            lv_async_call(_invalidate_cb, NULL);
+        }
+        /* Return false so the caller can pass UP/LEFT/RIGHT to nav_move_dir */
+        return _grid_active;
+    }
+
+    /* Grid is active — handle cursor movement */
     switch (lv_key) {
         case LV_KEY_LEFT:
             _cur_col = (_cur_col - 1 + CARD_COLUMNS) % CARD_COLUMNS;
@@ -190,18 +203,26 @@ void memory_ui_joystick(uint32_t lv_key)
             _cur_col = (_cur_col + 1) % CARD_COLUMNS;
             break;
         case LV_KEY_UP:
-            _cur_row = (_cur_row - 1 + CARD_ROWS) % CARD_ROWS;
+            if (_cur_row == 0) {
+                /* Leave grid — return focus to back button */
+                _grid_active = false;
+                lv_async_call(_invalidate_cb, NULL);
+                return false;   /* let nav_move_dir focus the back button */
+            }
+            _cur_row--;
             break;
         case LV_KEY_DOWN:
             _cur_row = (_cur_row + 1) % CARD_ROWS;
             break;
         default:
-            return;
+            return true;
     }
     lv_async_call(_invalidate_cb, NULL);
+    return true;
 }
 
 void memory_ui_select(void)
 {
+    if (!_grid_active) return;  /* back button has focus — don't select a card */
     lv_async_call(_select_cb, NULL);
 }

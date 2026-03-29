@@ -121,11 +121,18 @@ static void _joystick_event_cb(joystick_pos_t pos)
     bool moved = false;
 
     if (dir != 0 && lv_scr_act() == ui_MemoryScreen) {
-        /* Memory screen: move cursor, no auto-repeat */
-        if (dir != prev_dir)
-            memory_ui_joystick(dir);
-        prev_dir = dir;
-        return;
+        /* Memory screen: move cursor, no auto-repeat.
+         * If joystick returns false (exiting grid upward), fall through to nav. */
+        if (dir != prev_dir) {
+            if (memory_ui_joystick(dir)) {
+                prev_dir = dir;
+                return;
+            }
+            /* Grid exited — nav_move_dir will focus the back button */
+        } else {
+            prev_dir = dir;
+            return;
+        }
     }
 
     switch (dir) {
