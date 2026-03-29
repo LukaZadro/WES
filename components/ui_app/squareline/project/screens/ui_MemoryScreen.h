@@ -14,9 +14,9 @@ extern "C" {
 extern void ui_MemoryScreen_screen_init(void);
 extern void ui_MemoryScreen_screen_destroy(void);
 extern lv_obj_t * ui_MemoryScreen;
-extern lv_obj_t * ui_Panel2;
 extern void ui_event_ImgButton17(lv_event_t * e);
 extern lv_obj_t * ui_ImgButton17;
+extern lv_obj_t * ui_Container1;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

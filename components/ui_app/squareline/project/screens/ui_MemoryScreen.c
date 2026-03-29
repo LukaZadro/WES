@@ -6,8 +6,8 @@
 #include "../ui.h"
 
 lv_obj_t * ui_MemoryScreen = NULL;
-lv_obj_t * ui_Panel2 = NULL;
 lv_obj_t * ui_ImgButton17 = NULL;
+lv_obj_t * ui_Container1 = NULL;
 // event funtions
 void ui_event_ImgButton17(lv_event_t * e)
 {
@@ -24,12 +24,7 @@ void ui_MemoryScreen_screen_init(void)
 {
     ui_MemoryScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_MemoryScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
-    ui_Panel2 = lv_obj_create(ui_MemoryScreen);
-    lv_obj_set_width(ui_Panel2, 240);
-    lv_obj_set_height(ui_Panel2, 180);
-    lv_obj_set_align(ui_Panel2, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_Panel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_img_src(ui_MemoryScreen, &ui_img_527192083, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ImgButton17 = lv_imgbtn_create(ui_MemoryScreen);
     lv_imgbtn_set_src(ui_ImgButton17, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
@@ -38,6 +33,15 @@ void ui_MemoryScreen_screen_init(void)
     lv_obj_set_x(ui_ImgButton17, -142);
     lv_obj_set_y(ui_ImgButton17, -97);
     lv_obj_set_align(ui_ImgButton17, LV_ALIGN_CENTER);
+
+    ui_Container1 = lv_obj_create(ui_MemoryScreen);
+    lv_obj_remove_style_all(ui_Container1);
+    lv_obj_set_width(ui_Container1, 264);
+    lv_obj_set_height(ui_Container1, 200);
+    lv_obj_set_x(ui_Container1, 11);
+    lv_obj_set_y(ui_Container1, 0);
+    lv_obj_set_align(ui_Container1, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_Container1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     lv_obj_add_event_cb(ui_ImgButton17, ui_event_ImgButton17, LV_EVENT_ALL, NULL);
 
@@ -49,7 +53,7 @@ void ui_MemoryScreen_screen_destroy(void)
 
     // NULL screen variables
     ui_MemoryScreen = NULL;
-    ui_Panel2 = NULL;
     ui_ImgButton17 = NULL;
+    ui_Container1 = NULL;
 
 }

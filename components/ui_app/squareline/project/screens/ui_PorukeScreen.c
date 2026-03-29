@@ -4,13 +4,10 @@
 // Project name: esp32_gui
 
 #include "../ui.h"
-#include "mqtt_client_bl.h"
 
 lv_obj_t * ui_PorukeScreen = NULL;
 lv_obj_t * ui_Keyboard1 = NULL;
 lv_obj_t * ui_BackButtonMsg = NULL;
-lv_obj_t * ui_TextArea1 = NULL;
-
 // event funtions
 void ui_event_BackButtonMsg(lv_event_t * e)
 {
@@ -21,20 +18,6 @@ void ui_event_BackButtonMsg(lv_event_t * e)
     }
 }
 
-static void _keyboard_event_cb(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    /* LV_EVENT_READY fires when the checkmark key is pressed */
-    if(event_code == LV_EVENT_READY) {
-        const char *msg = lv_textarea_get_text(ui_TextArea1);
-        if(msg && msg[0] != '\0') {
-            mqtt_client_bl_publish("/poruke/child", msg, 0, false);
-            lv_textarea_set_text(ui_TextArea1, "");
-        }
-    }
-}
-
 // build funtions
 
 void ui_PorukeScreen_screen_init(void)
@@ -42,20 +25,12 @@ void ui_PorukeScreen_screen_init(void)
     ui_PorukeScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_PorukeScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_TextArea1 = lv_textarea_create(ui_PorukeScreen);
-    lv_obj_set_width(ui_TextArea1, 300);
-    lv_obj_set_height(ui_TextArea1, 80);
-    lv_obj_align(ui_TextArea1, LV_ALIGN_TOP_MID, 0, 50);
-    lv_textarea_set_placeholder_text(ui_TextArea1, "Upisi poruku...");
-    lv_textarea_set_one_line(ui_TextArea1, false);
-
     ui_Keyboard1 = lv_keyboard_create(ui_PorukeScreen);
     lv_obj_set_width(ui_Keyboard1, 317);
     lv_obj_set_height(ui_Keyboard1, 120);
     lv_obj_set_x(ui_Keyboard1, 1);
     lv_obj_set_y(ui_Keyboard1, 55);
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
-    lv_obj_add_event_cb(ui_Keyboard1, _keyboard_event_cb, LV_EVENT_ALL, NULL);
 
     ui_BackButtonMsg = lv_imgbtn_create(ui_PorukeScreen);
     lv_imgbtn_set_src(ui_BackButtonMsg, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
@@ -67,7 +42,6 @@ void ui_PorukeScreen_screen_init(void)
 
     lv_obj_add_event_cb(ui_BackButtonMsg, ui_event_BackButtonMsg, LV_EVENT_ALL, NULL);
 
-    lv_keyboard_set_textarea(ui_Keyboard1, ui_TextArea1);
 }
 
 void ui_PorukeScreen_screen_destroy(void)
@@ -78,6 +52,5 @@ void ui_PorukeScreen_screen_destroy(void)
     ui_PorukeScreen = NULL;
     ui_Keyboard1 = NULL;
     ui_BackButtonMsg = NULL;
-    ui_TextArea1 = NULL;
 
 }
