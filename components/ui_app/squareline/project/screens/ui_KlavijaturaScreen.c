@@ -304,10 +304,9 @@ void ui_KlavijaturaScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_CisNote, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_ImgButton10 = lv_imgbtn_create(ui_KlavijaturaScreen);
-    lv_imgbtn_set_src(ui_ImgButton10, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_back_button_30x30_png, NULL);
     lv_obj_set_width(ui_ImgButton10, 30);
     lv_obj_set_height(ui_ImgButton10, 30);
-    lv_obj_set_x(ui_ImgButton10, -139);
+    lv_obj_set_x(ui_ImgButton10, -140);
     lv_obj_set_y(ui_ImgButton10, -100);
     lv_obj_set_align(ui_ImgButton10, LV_ALIGN_CENTER);
 

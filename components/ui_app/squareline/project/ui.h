@@ -24,6 +24,11 @@ extern "C" {
 #include "screens/ui_SOSScreen.h"
 #include "screens/ui_PorukeScreen.h"
 #include "screens/ui_KlavijaturaScreen.h"
+#include "screens/ui_HomePage2.h"
+#include "screens/ui_KoraciScreen.h"
+#include "screens/ui_TemperaturaScreen.h"
+#include "screens/ui_VoiceChangerScreen.h"
+#include "screens/ui_KameraScreen.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -45,9 +50,13 @@ LV_IMG_DECLARE(ui_img_memory_game_80x80_png);    // assets/memory_game_80x80.png
 LV_IMG_DECLARE(ui_img_messages_icon_80x80_png);    // assets/messages_icon_80x80.png
 LV_IMG_DECLARE(ui_img_tetris_icon_80x80_png);    // assets/tetris_icon_80x80.png
 LV_IMG_DECLARE(ui_img_sos_30x30_png);    // assets/sos_30x30.png
-LV_IMG_DECLARE(ui_img_back_button_30x30_png);    // assets/back_button_30x30.png
 LV_IMG_DECLARE(ui_img_sos_icon_120x120_png);    // assets/sos_icon_120x120.png
-LV_IMG_DECLARE(ui_img_wp2844947_png);    // assets/wp2844947.png
+LV_IMG_DECLARE(
+    ui_img_289807621);    // assets/vector-color-camera-icon-logo-600nw-2643130659-ezgif.com-webp-to-png-converter.png
+LV_IMG_DECLARE(ui_img_1995866322);    // assets/istockphoto-852156476-612x612.png
+LV_IMG_DECLARE(ui_img_1108033562);    // assets/unnamed-ezgif.com-webp-to-png-converter.png
+LV_IMG_DECLARE(ui_img_702957783);    // assets/unnamed1-ezgif.com-webp-to-png-converter.png
+LV_IMG_DECLARE(ui_img_1392414027);    // assets/ResizeImage-removebg-preview.png
 
 // UI INIT
 void ui_init(void);

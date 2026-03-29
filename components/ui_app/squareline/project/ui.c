@@ -317,6 +317,11 @@ void ui_init(void)
     ui_SOSScreen_screen_init();
     ui_PorukeScreen_screen_init();
     ui_KlavijaturaScreen_screen_init();
+    ui_HomePage2_screen_init();
+    ui_KoraciScreen_screen_init();
+    ui_TemperaturaScreen_screen_init();
+    ui_VoiceChangerScreen_screen_init();
+    ui_KameraScreen_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_HomePage);
 }
@@ -329,4 +334,9 @@ void ui_destroy(void)
     ui_SOSScreen_screen_destroy();
     ui_PorukeScreen_screen_destroy();
     ui_KlavijaturaScreen_screen_destroy();
+    ui_HomePage2_screen_destroy();
+    ui_KoraciScreen_screen_destroy();
+    ui_TemperaturaScreen_screen_destroy();
+    ui_VoiceChangerScreen_screen_destroy();
+    ui_KameraScreen_screen_destroy();
 }

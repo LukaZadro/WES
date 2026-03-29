@@ -4,261 +4,52 @@
 // Project name: esp32_gui
 
 #include "../ui.h"
-#include "mqtt_client_bl.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 
-/* ------------------------------------------------------------------ */
-/*  Widget handles                                                      */
-/* ------------------------------------------------------------------ */
-lv_obj_t * ui_PorukeScreen  = NULL;
-lv_obj_t * ui_Keyboard1     = NULL;
+lv_obj_t * ui_PorukeScreen = NULL;
+lv_obj_t * ui_Keyboard1 = NULL;
 lv_obj_t * ui_BackButtonMsg = NULL;
-lv_obj_t * ui_TextArea1     = NULL;
-static lv_obj_t * ui_MsgList = NULL;
-
-/* ------------------------------------------------------------------ */
-/*  Received-message ring buffer (persists across screen open/close)  */
-/* ------------------------------------------------------------------ */
-#define RX_BUF_SLOTS 20
-#define RX_MSG_MAX   128
-
-static char s_rx_buf[RX_BUF_SLOTS][RX_MSG_MAX];
-static int  s_rx_head  = 0;   /* index of oldest stored message */
-static int  s_rx_tail  = 0;   /* next write index               */
-static int  s_rx_count = 0;   /* messages currently in buffer   */
-
-static int s_unread = 0;
-
-int  poruke_get_unread(void)   { return s_unread; }
-void poruke_clear_unread(void) { s_unread = 0; }
-
-static void _store_rx(const char *text)
+// event funtions
+void ui_event_BackButtonMsg(lv_event_t * e)
 {
-    strncpy(s_rx_buf[s_rx_tail], text, RX_MSG_MAX - 1);
-    s_rx_buf[s_rx_tail][RX_MSG_MAX - 1] = '\0';
-    s_rx_tail = (s_rx_tail + 1) % RX_BUF_SLOTS;
-    if(s_rx_count < RX_BUF_SLOTS)
-        s_rx_count++;
-    else
-        s_rx_head = (s_rx_head + 1) % RX_BUF_SLOTS; /* overwrite oldest */
-}
+    lv_event_code_t event_code = lv_event_get_code(e);
 
-/* ------------------------------------------------------------------ */
-/*  Message bubble                                                      */
-/* ------------------------------------------------------------------ */
-static void _add_message(const char *text, bool sent)
-{
-    if(!ui_MsgList) return;
-
-    /* Transparent full-width row so we can align bubble L or R */
-    lv_obj_t *row = lv_obj_create(ui_MsgList);
-    lv_obj_set_width(row, lv_pct(100));
-    lv_obj_set_height(row, LV_SIZE_CONTENT);
-    lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_set_style_bg_opa(row, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_border_width(row, 0, 0);
-    lv_obj_set_style_pad_all(row, 0, 0);
-    lv_obj_set_style_pad_bottom(row, 3, 0);
-
-    /* Coloured bubble */
-    lv_obj_t *bubble = lv_obj_create(row);
-    lv_obj_set_width(bubble, LV_SIZE_CONTENT);
-    lv_obj_set_height(bubble, LV_SIZE_CONTENT);
-    lv_obj_set_style_pad_hor(bubble, 8, 0);
-    lv_obj_set_style_pad_ver(bubble, 5, 0);
-    lv_obj_set_style_radius(bubble, 10, 0);
-    lv_obj_set_style_border_width(bubble, 0, 0);
-    lv_obj_clear_flag(bubble, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
-
-    /* Text label — fixed width so long text wraps */
-    lv_obj_t *label = lv_label_create(bubble);
-    lv_label_set_text(label, text);
-    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(label, 180);
-    lv_obj_set_height(label, LV_SIZE_CONTENT);
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-
-    if(sent)
-    {
-        lv_obj_set_style_bg_color(bubble, lv_color_hex(0x2E9D3D), 0); /* green  */
-        lv_obj_align(bubble, LV_ALIGN_RIGHT_MID, -4, 0);
-    }
-    else
-    {
-        lv_obj_set_style_bg_color(bubble, lv_color_hex(0x1565C0), 0); /* blue   */
-        lv_obj_align(bubble, LV_ALIGN_LEFT_MID, 4, 0);
-    }
-
-    /* Always scroll to bottom so the newest message is visible */
-    lv_obj_scroll_to_y(ui_MsgList, LV_COORD_MAX, LV_ANIM_ON);
-}
-
-/* ------------------------------------------------------------------ */
-/*  MQTT → LVGL bridge (lv_async_call runs in LVGL task context)      */
-/* ------------------------------------------------------------------ */
-static void _async_add_received(void *data)
-{
-    char *msg = (char *)data;
-
-    if(ui_MsgList)
-    {
-        /* Poruke screen is open — show immediately */
-        _add_message(msg, false);
-    }
-    else
-    {
-        /* Screen is closed — buffer for next open, bump badge */
-        _store_rx(msg);
-        s_unread++;
-        /* Update home-page badge if it is currently displayed */
-        if(ui_Poruke) ui_update_poruke_badge(s_unread);
-    }
-
-    free(msg);
-}
-
-static void _on_mqtt_message(const char *topic, const char *payload)
-{
-    (void)topic;
-    char *copy = strdup(payload);
-    if(copy) lv_async_call(_async_add_received, copy);
-}
-
-/* ------------------------------------------------------------------ */
-/*  Keyboard show / hide                                               */
-/* ------------------------------------------------------------------ */
-static void _show_keyboard(void)
-{
-    lv_obj_set_pos(ui_TextArea1, 0, 88);  /* slide above keyboard */
-    lv_obj_clear_flag(ui_Keyboard1, LV_OBJ_FLAG_HIDDEN);
-}
-
-static void _hide_keyboard(void)
-{
-    lv_obj_add_flag(ui_Keyboard1, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_pos(ui_TextArea1, 0, 204); /* back to bottom */
-    lv_obj_clear_state(ui_TextArea1, LV_STATE_FOCUSED | LV_STATE_EDITED);
-}
-
-static void _textarea_event_cb(lv_event_t *e)
-{
-    if(lv_event_get_code(e) == LV_EVENT_CLICKED)
-        _show_keyboard();
-}
-
-static void _keyboard_event_cb(lv_event_t *e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-
-    if(code == LV_EVENT_READY)
-    {
-        const char *msg = lv_textarea_get_text(ui_TextArea1);
-        if(msg && msg[0] != '\0')
-        {
-            _add_message(msg, true);
-            mqtt_client_bl_publish("/parent/inbox", msg, 0, false);
-            lv_textarea_set_text(ui_TextArea1, "");
-        }
-        _hide_keyboard();
-    }
-    else if(code == LV_EVENT_CANCEL)
-    {
-        _hide_keyboard();
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Back button                                                        */
-/* ------------------------------------------------------------------ */
-void ui_event_BackButtonMsg(lv_event_t *e)
-{
-    if(lv_event_get_code(e) == LV_EVENT_CLICKED)
-    {
-        poruke_clear_unread();
-        if(ui_Poruke) ui_update_poruke_badge(0);
-        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0,
-                          &ui_HomePage_screen_init);
-    }
-}
+// build funtions
 
-/* ------------------------------------------------------------------ */
-/*  Screen init                                                        */
-/* ------------------------------------------------------------------ */
 void ui_PorukeScreen_screen_init(void)
 {
     ui_PorukeScreen = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_PorukeScreen, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_style_bg_color(ui_PorukeScreen, lv_color_hex(0x1A1A2E), 0);
+    lv_obj_clear_flag(ui_PorukeScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    /* -- Back button -- */
+    ui_Keyboard1 = lv_keyboard_create(ui_PorukeScreen);
+    lv_obj_set_width(ui_Keyboard1, 317);
+    lv_obj_set_height(ui_Keyboard1, 120);
+    lv_obj_set_x(ui_Keyboard1, 1);
+    lv_obj_set_y(ui_Keyboard1, 55);
+    lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
+
     ui_BackButtonMsg = lv_imgbtn_create(ui_PorukeScreen);
-    lv_imgbtn_set_src(ui_BackButtonMsg, LV_IMGBTN_STATE_RELEASED, NULL,
-                      &ui_img_back_button_30x30_png, NULL);
-    lv_obj_set_size(ui_BackButtonMsg, 30, 30);
-    lv_obj_set_pos(ui_BackButtonMsg, 5, 5);
+    lv_obj_set_width(ui_BackButtonMsg, 30);
+    lv_obj_set_height(ui_BackButtonMsg, 30);
+    lv_obj_set_x(ui_BackButtonMsg, -140);
+    lv_obj_set_y(ui_BackButtonMsg, -100);
+    lv_obj_set_align(ui_BackButtonMsg, LV_ALIGN_CENTER);
+
     lv_obj_add_event_cb(ui_BackButtonMsg, ui_event_BackButtonMsg, LV_EVENT_ALL, NULL);
 
-    /* -- Message list (scrollable flex column) -- */
-    ui_MsgList = lv_obj_create(ui_PorukeScreen);
-    lv_obj_set_size(ui_MsgList, 320, 160);
-    lv_obj_set_pos(ui_MsgList, 0, 38);
-    lv_obj_set_style_bg_color(ui_MsgList, lv_color_hex(0x1A1A2E), 0);
-    lv_obj_set_style_border_width(ui_MsgList, 0, 0);
-    lv_obj_set_style_radius(ui_MsgList, 0, 0);
-    lv_obj_set_style_pad_all(ui_MsgList, 4, 0);
-    lv_obj_set_flex_flow(ui_MsgList, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_flex_align(ui_MsgList, LV_FLEX_ALIGN_START,
-                          LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
-    lv_obj_set_scroll_dir(ui_MsgList, LV_DIR_VER);
-    lv_obj_set_scrollbar_mode(ui_MsgList, LV_SCROLLBAR_MODE_AUTO);
-
-    /* Display messages that arrived while screen was closed */
-    for(int i = 0; i < s_rx_count; i++)
-    {
-        int idx = (s_rx_head + i) % RX_BUF_SLOTS;
-        _add_message(s_rx_buf[idx], false);
-    }
-    /* Clear buffer — they are now on screen */
-    s_rx_head = s_rx_tail = s_rx_count = 0;
-
-    /* Clear unread badge */
-    poruke_clear_unread();
-
-    /* -- Input textarea (bottom bar) -- */
-    ui_TextArea1 = lv_textarea_create(ui_PorukeScreen);
-    lv_obj_set_size(ui_TextArea1, 320, 28);
-    lv_obj_set_pos(ui_TextArea1, 0, 204);  /* fixed — never moves */
-    lv_textarea_set_placeholder_text(ui_TextArea1, "Upisi poruku...");
-    lv_textarea_set_one_line(ui_TextArea1, true);
-    lv_obj_add_event_cb(ui_TextArea1, _textarea_event_cb, LV_EVENT_ALL, NULL);
-
-    /* -- Keyboard (hidden until textarea tapped) -- */
-    ui_Keyboard1 = lv_keyboard_create(ui_PorukeScreen);
-    lv_obj_set_size(ui_Keyboard1, 317, 120);
-    lv_obj_align(ui_Keyboard1, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_add_flag(ui_Keyboard1, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_event_cb(ui_Keyboard1, _keyboard_event_cb, LV_EVENT_ALL, NULL);
-    lv_keyboard_set_textarea(ui_Keyboard1, ui_TextArea1);
-
-    /* Subscribe to incoming messages */
-    mqtt_client_bl_set_message_cb(_on_mqtt_message);
-    mqtt_client_bl_subscribe(MQTT_INBOX_TOPIC, 0);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Screen destroy                                                     */
-/* ------------------------------------------------------------------ */
 void ui_PorukeScreen_screen_destroy(void)
 {
-    /* Unregister callback — MQTT keeps running but won't touch LVGL */
-    mqtt_client_bl_set_message_cb(NULL);
-
     if(ui_PorukeScreen) lv_obj_del(ui_PorukeScreen);
-    ui_PorukeScreen  = NULL;
-    ui_Keyboard1     = NULL;
+
+    // NULL screen variables
+    ui_PorukeScreen = NULL;
+    ui_Keyboard1 = NULL;
     ui_BackButtonMsg = NULL;
-    ui_TextArea1     = NULL;
-    ui_MsgList       = NULL;
+
 }
