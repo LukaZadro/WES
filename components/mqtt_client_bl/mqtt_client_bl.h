@@ -25,6 +25,14 @@
 #define MQTT_BROKER_URI "ws://172.16.55.132:1883"
 #endif
 
+/** Topic the device subscribes to for incoming messages. */
+#define MQTT_INBOX_TOPIC "/child/inbox"
+
+//-------------------------------- DATA TYPES ---------------------------------
+
+/** Callback invoked (from MQTT task) when a message arrives on a subscribed topic. */
+typedef void (*mqtt_message_cb_t)(const char *topic, const char *payload);
+
 //------------------------- PUBLIC FUNCTION PROTOTYPES ------------------------
 
 /**
@@ -46,6 +54,24 @@ esp_err_t mqtt_client_bl_init(void);
  */
 esp_err_t mqtt_client_bl_publish(const char *topic, const char *payload,
                                  int qos, bool retain);
+
+/**
+ * @brief Subscribe to a topic.
+ *        If not yet connected, the subscription is remembered and applied
+ *        automatically on the next successful connection.
+ *
+ * @param topic  MQTT topic string.
+ * @param qos    QoS level: 0, 1, or 2.
+ * @return ESP_OK on success.
+ */
+esp_err_t mqtt_client_bl_subscribe(const char *topic, int qos);
+
+/**
+ * @brief Register a callback invoked when a message arrives on a subscribed topic.
+ *        Pass NULL to unregister.  The callback runs in the MQTT task context —
+ *        use lv_async_call() to touch LVGL widgets from within it.
+ */
+void mqtt_client_bl_set_message_cb(mqtt_message_cb_t cb);
 
 /**
  * @brief Returns true if the client is currently connected to the broker.
