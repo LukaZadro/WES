@@ -4,6 +4,7 @@
 // Project name: esp32_gui
 
 #include "../ui.h"
+#include "../ui_events.h"
 #include "mqtt_client_bl.h"
 #include <string.h>
 #include <stdlib.h>
@@ -204,7 +205,7 @@ void ui_PorukeScreen_screen_init(void)
     ui_MsgList = lv_obj_create(ui_PorukeScreen);
     lv_obj_set_size(ui_MsgList, 320, 160);
     lv_obj_set_pos(ui_MsgList, 0, 38);
-    lv_obj_set_style_bg_color(ui_MsgList, lv_color_hex(0x1A1A2E), 0);
+    lv_obj_set_style_bg_opa(ui_MsgList, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(ui_MsgList, 0, 0);
     lv_obj_set_style_radius(ui_MsgList, 0, 0);
     lv_obj_set_style_pad_all(ui_MsgList, 4, 0);
@@ -245,6 +246,10 @@ void ui_PorukeScreen_screen_init(void)
     /* Subscribe to incoming messages */
     mqtt_client_bl_set_message_cb(_on_mqtt_message);
     mqtt_client_bl_subscribe(MQTT_INBOX_TOPIC, 0);
+
+    /* Apply the currently active background theme */
+    is_blue_mode(NULL);
+    roza_boja(NULL);
 }
 
 /* ------------------------------------------------------------------ */
