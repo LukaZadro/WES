@@ -27,10 +27,7 @@ typedef struct
     bool        pressed;
 } btn_event_t;
 
-static QueueHandle_t      _btn_queue;
-static const char * const _btn_names[BUTTON_COUNT] = {
-    "BTN1", "BTN2", "BTN3", "BTN4"
-};
+static QueueHandle_t _btn_queue;
 
 static void _button_event_cb(button_id_t id, bool pressed)
 {

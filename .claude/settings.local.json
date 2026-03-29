@@ -3,7 +3,10 @@
     "allow": [
       "Bash(python3 -c \"from PIL import Image; print\\(''Pillow OK''\\)\")",
       "Bash(python -c \"from PIL import Image; print\\(''Pillow OK''\\)\")",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(grep -h '^extern lv_obj_t \\\\* ui_.*Screen' c:/Users/glusc/WES/components/ui_app/squareline/project/screens/*.h)",
+      "Bash(grep -rh \"^extern lv_obj_t \\\\* ui_HomePage\\\\|^extern lv_obj_t \\\\* ui_HomePage2\\\\|^extern lv_obj_t \\\\* ui_Korak\\\\|^extern lv_obj_t \\\\* ui_Temp\\\\|^extern lv_obj_t \\\\* ui_Kamer\\\\|^extern lv_obj_t \\\\* ui_Voice\" c:/Users/glusc/WES/components/ui_app/squareline/project/screens/*.h)",
+      "Bash(grep -rh '^extern lv_obj_t' c:/Users/glusc/WES/components/ui_app/squareline/project/screens/*.h)"
     ]
   }
 }
