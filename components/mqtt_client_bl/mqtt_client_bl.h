@@ -22,7 +22,7 @@
 
 /** Broker URI – override in menuconfig or change here. */
 #ifndef MQTT_BROKER_URI
-#define MQTT_BROKER_URI "mqtt://TvojBroker.com"
+#define MQTT_BROKER_URI "ws://172.16.55.132:1883"
 #endif
 
 //------------------------- PUBLIC FUNCTION PROTOTYPES ------------------------
