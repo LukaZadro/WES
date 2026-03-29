@@ -1,0 +1,15 @@
+menu "SHT31 Temperature & Humidity Sensor"
+
+    config SHT31_I2C_SDA
+        int "SHT31 I2C SDA GPIO"
+        default 21
+        help
+            GPIO number for I2C SDA connected to SHT31 (I2C_SDA_SW on BLDK).
+
+    config SHT31_I2C_SCL
+        int "SHT31 I2C SCL GPIO"
+        default 22
+        help
+            GPIO number for I2C SCL connected to SHT31 (I2C_SCL_SW on BLDK).
+
+endmenu
