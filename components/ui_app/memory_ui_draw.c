@@ -1,3 +1,4 @@
+#include "core/lv_obj_pos.h"
 #include "esp_log.h"
 #include "memory_ui_draw.h"
 #include "memory.h"
@@ -106,8 +107,6 @@ static void ui_event_memory_click(lv_event_t * e)
     
     int c = local_x * CARD_COLUMNS / lv_obj_get_width(obj);
     int r = local_y * CARD_ROWS / lv_obj_get_height(obj);
-
-    ESP_LOGI(TAG, "Click: %d, %d", c, r);
 
     /* Validate bounds and flip card */
     if (r >= 0 && r < CARD_ROWS && c >= 0 && c < CARD_COLUMNS) {
