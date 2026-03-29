@@ -153,10 +153,6 @@ void ui_KlavijaturaScreen_screen_init(void)
 {
     ui_KlavijaturaScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_KlavijaturaScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_KlavijaturaScreen, lv_color_hex(0x857E7E), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_KlavijaturaScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_outline_color(ui_KlavijaturaScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_outline_opa(ui_KlavijaturaScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_DNote = lv_btn_create(ui_KlavijaturaScreen);
     lv_obj_set_width(ui_DNote, 40);

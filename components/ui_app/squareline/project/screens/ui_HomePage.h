@@ -32,7 +32,6 @@ extern lv_obj_t * ui_Image3;
 extern lv_obj_t * ui_Image4;
 extern lv_obj_t * ui_Image5;
 extern lv_obj_t * ui_Image6;
-extern lv_obj_t * ui_Image1;
 // CUSTOM VARIABLES
 extern lv_obj_t * ui_PorukeBadge;
 extern void ui_update_poruke_badge(int count);

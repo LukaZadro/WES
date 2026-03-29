@@ -50,6 +50,9 @@ void ui_event_Memory(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_MemoryScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_MemoryScreen_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        memory_start(e);
+    }
 }
 
 void ui_event_SOS(lv_event_t * e)
