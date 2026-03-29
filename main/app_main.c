@@ -12,6 +12,7 @@
 #include "ui_events.h"
 #include "accelerometer.h"
 #include "sleep_timer.h"
+#include "step_counter.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -211,5 +212,6 @@ void app_main(void)
     vTaskDelay(pdMS_TO_TICKS(200));
 
     acc_init(NULL);
+    step_counter_init();
     sleep_timer_init(_on_sleep_cb, NULL);
 }
