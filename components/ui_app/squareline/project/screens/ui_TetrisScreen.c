@@ -25,6 +25,7 @@ void ui_TetrisScreen_screen_init(void)
 {
     ui_TetrisScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_TetrisScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_img_src(ui_TetrisScreen, &ui_img_527192083, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Panel1 = lv_obj_create(ui_TetrisScreen);
     lv_obj_set_width(ui_Panel1, 110);
