@@ -50,6 +50,8 @@ LV_IMG_DECLARE(ui_img_memory_game_80x80_png);    // assets/memory_game_80x80.png
 LV_IMG_DECLARE(ui_img_messages_icon_80x80_png);    // assets/messages_icon_80x80.png
 LV_IMG_DECLARE(ui_img_tetris_icon_80x80_png);    // assets/tetris_icon_80x80.png
 LV_IMG_DECLARE(ui_img_sos_30x30_png);    // assets/sos_30x30.png
+LV_IMG_DECLARE(ui_img_wp2844947_png);    // assets/wp2844947.png
+LV_IMG_DECLARE(ui_img_back_button_30x30_png);    // assets/back_button_30x30.png
 LV_IMG_DECLARE(ui_img_sos_icon_120x120_png);    // assets/sos_icon_120x120.png
 LV_IMG_DECLARE(
     ui_img_289807621);    // assets/vector-color-camera-icon-logo-600nw-2643130659-ezgif.com-webp-to-png-converter.png
