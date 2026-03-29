@@ -37,6 +37,8 @@ bool memory_reveal(memory_game_t *game, card_point_t point) {
     if (game->first_point.x == CARD_UNSELECTED)
         game->first_point = point;
     else if (game->second_point.x == CARD_UNSELECTED) {
+        if (game->first_point.x == point.x && game->first_point.y == point.y)
+            return false;
         if (game->cards[game->first_point.x][game->first_point.y] == game->cards[point.x][point.y]) {
             game->revealed[game->first_point.x][game->first_point.y] = true;
             game->revealed[point.x][point.y] = true;
