@@ -9,6 +9,8 @@
 #include "joystick.h"
 #include "ui.h"
 #include "ui_events.h"
+#include "accelerometer.h"
+#include "sleep_timer.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -25,10 +27,7 @@ typedef struct
     bool        pressed;
 } btn_event_t;
 
-static QueueHandle_t      _btn_queue;
-static const char * const _btn_names[BUTTON_COUNT] = {
-    "BTN1", "BTN2", "BTN3", "BTN4"
-};
+static QueueHandle_t _btn_queue;
 
 static void _button_event_cb(button_id_t id, bool pressed)
 {
@@ -56,8 +55,7 @@ static void _button_task(void *arg)
     {
         if (xQueueReceive(_btn_queue, &evt, portMAX_DELAY))
         {
-            ESP_LOGI(TAG, "%s %s", _btn_names[evt.id],
-                     evt.pressed ? "PRESSED" : "RELEASED");
+            sleep_timer_reset();
 
             switch (evt.id)
             {
@@ -112,6 +110,8 @@ static void _joystick_event_cb(joystick_pos_t pos)
         else if (pos.y < -JOY_THRESHOLD) dir = LV_KEY_UP;
     }
 
+    if (dir != 0) sleep_timer_reset();
+
     bool moved = false;
     switch (dir) {
         case 0:
@@ -135,6 +135,14 @@ static void _joystick_event_cb(joystick_pos_t pos)
         nav_move_dir(dir);
 
     prev_dir = dir;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Sleep callbacks                                                     */
+/* ------------------------------------------------------------------ */
+static void _on_sleep_cb(void)
+{
+    acc_prepare_sleep();   /* Clear latched INT1 so ext1 doesn't fire instantly */
 }
 
 /* ------------------------------------------------------------------ */
@@ -173,4 +181,13 @@ void app_main(void)
 
     /* GUI – pins to Core 1 */
     gui_init();
+
+    /*
+     * Wait for the GUI task to initialise the VSPI bus (lvgl_driver_init)
+     * before adding the accelerometer as another device on that bus.
+     */
+    vTaskDelay(pdMS_TO_TICKS(200));
+
+    acc_init(NULL);
+    sleep_timer_init(_on_sleep_cb, NULL);
 }

@@ -28,6 +28,7 @@
 #include "ui_app/ui_app.h"
 #include "nav.h"
 #include "ui_events.h"
+#include "sleep_timer.h"
 //---------------------------------- MACROS -----------------------------------
 #define LV_TICK_PERIOD_MS (1U)
 
@@ -121,8 +122,9 @@ static void _gui_task(void *p_parameter)
     /* Register an input device */
     static lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv);
-    indev_drv.read_cb = touch_driver_read;
-    indev_drv.type    = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb     = touch_driver_read;
+    indev_drv.type        = LV_INDEV_TYPE_POINTER;
+    indev_drv.feedback_cb = sleep_timer_lv_feedback;
     lv_indev_drv_register(&indev_drv);
 
     /* Create and start a periodic timer interrupt to call lv_tick_inc */
