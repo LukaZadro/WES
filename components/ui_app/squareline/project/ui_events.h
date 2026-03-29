@@ -12,9 +12,11 @@ extern "C" {
 
 void is_blue_mode(lv_event_t * e);
 void roza_boja(lv_event_t * e);
+void memory_start(lv_event_t * e);
 void sos_music_on(lv_event_t * e);
 void tetris_music_on(lv_event_t * e);
 void exit_tetris(lv_event_t * e);
+void memory_back(lv_event_t * e);
 void sos_music_off(lv_event_t * e);
 void d_note_event(lv_event_t * e);
 void c_note_event(lv_event_t * e);

@@ -16,6 +16,10 @@ void ui_event_ImgButton17(lv_event_t * e)
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
     }
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_HomePage, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_HomePage_screen_init);
+        memory_back(e);
+    }
 }
 
 // build funtions
