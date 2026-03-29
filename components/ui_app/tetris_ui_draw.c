@@ -8,14 +8,14 @@
 
 #define TAG "tetris_draw"
 
-tetris_game_t *game = NULL;
+tetris_game_t *tetris_game = NULL;
 
 /* This function handles the manual drawing of the Tetris board */
 void ui_event_draw_board(lv_event_t * e)
 {
-    tetris_game_t *g = game;
+    tetris_game_t *game = tetris_game;
 
-    if (g == NULL) {
+    if (game == NULL) {
         ESP_LOGW(TAG, "game is NULL");
         return;
     }
@@ -43,7 +43,7 @@ void ui_event_draw_board(lv_event_t * e)
     /* 1. Draw the static board */
     for(int y = 0; y < BOARD_HEIGHT; y++) {
         for(int x = 0; x < BOARD_WIDTH; x++) {
-            if(g->game_board[y][x] > 0) {
+            if(game->game_board[y][x] > 0) {
                 lv_area_t cell_area;
                 cell_area.x1 = obj->coords.x1 + (x * cell_w);
                 cell_area.y1 = obj->coords.y1 + (y * cell_h);
@@ -51,23 +51,23 @@ void ui_event_draw_board(lv_event_t * e)
                 cell_area.y2 = cell_area.y1 + cell_h - 1;
 
                 /* Set color based on piece type stored in board */
-                rect_dsc.bg_color = lv_palette_main(g->game_board[y][x] % 8); 
+                rect_dsc.bg_color = lv_palette_main(game->game_board[y][x] % 8); 
                 lv_draw_rect(draw_ctx, &rect_dsc, &cell_area);
             }
         }
     }
 
     /* 2. Draw the active falling piece */
-    if (!g->game_over) {
-        uint16_t shape = shapes[g->current_piece.type][g->current_piece.rotation % 4];
+    if (!game->game_over) {
+        uint16_t shape = shapes[game->current_piece.type][game->current_piece.rotation % 4];
         rect_dsc.bg_color = lv_palette_main(LV_PALETTE_AMBER); // Highlight falling piece
         
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (shape & (1 << (15 - (i * 4 + j)))) {
                     lv_area_t cell_area;
-                    cell_area.x1 = obj->coords.x1 + ((g->current_piece.x + j) * cell_w);
-                    cell_area.y1 = obj->coords.y1 + ((g->current_piece.y + i) * cell_h);
+                    cell_area.x1 = obj->coords.x1 + ((game->current_piece.x + j) * cell_w);
+                    cell_area.y1 = obj->coords.y1 + ((game->current_piece.y + i) * cell_h);
                     cell_area.x2 = cell_area.x1 + cell_w - 1;
                     cell_area.y2 = cell_area.y1 + cell_h - 1;
                     
@@ -83,18 +83,18 @@ void ui_event_draw_board(lv_event_t * e)
 
 bool tetris_movement(movement_t movement)
 {
-    tetris_game_t *g = game;
-    if (g == NULL) return false;
+    tetris_game_t *game = tetris_game;
+    if (game == NULL) return false;
 
     switch (movement) {
         case tetris_move_left:
-            tetris_move(g, -1);
+            tetris_move(game, -1);
             break;
         case tetris_move_right:
-            tetris_move(g, +1);
+            tetris_move(game, +1);
             break;
         case tetris_soft_drop:
-            tetris_drop(g);
+            tetris_drop(game);
             break;
         case tetris_hard_drop:
             // TODO
@@ -103,7 +103,7 @@ bool tetris_movement(movement_t movement)
             // TODO
             break;
         case tetris_rotate_right:
-            tetris_rotate(g);
+            tetris_rotate(game);
             break;
     }
 
@@ -114,7 +114,7 @@ bool tetris_movement(movement_t movement)
 
 static void game_step_timer_cb(lv_timer_t * timer)
 {
-    if (game != NULL && tetris_tick(game)) {
+    if (tetris_game != NULL && tetris_tick(tetris_game)) {
         /* Force the panel to redraw its custom content */
         lv_obj_invalidate(ui_Panel1);
     }
@@ -125,8 +125,8 @@ lv_timer_t *update_timer;
 /* Call this once during your app initialization */
 void setup_tetris_ui(void)
 {
-    game = (tetris_game_t *) lv_mem_alloc(sizeof(tetris_game_t));
-    tetris_init(game);
+    tetris_game = (tetris_game_t *) lv_mem_alloc(sizeof(tetris_game_t));
+    tetris_init(tetris_game);
 
     ESP_LOGI(TAG, "Initialized tetris!");
     
@@ -141,6 +141,6 @@ void destroy_tetris_ui(void)
 {
     lv_timer_del(update_timer);
 
-    lv_mem_free(game);
-    game = NULL;
+    lv_mem_free(tetris_game);
+    tetris_game = NULL;
 }

@@ -1,9 +1,11 @@
 // ui_events.c
 #include <stdio.h>
+#include "memory.h"
 #include "ui.h"
 #include "max98357a.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "ui_app/memory_ui_draw.h"
 #include "ui_app/tetris_ui_draw.h"
 #include "freertos/queue.h"
 
@@ -239,12 +241,15 @@ void dis_note_event(lv_event_t * e) { (void)e; _play_note(311); }  /* D#4 311 Hz
 void fis_note_event(lv_event_t * e) { (void)e; _play_note(370); }  /* F#4 370 Hz */
 void gis_note_event(lv_event_t * e) { (void)e; _play_note(415); }  /* G#4 415 Hz */
 void ais_note_event(lv_event_t * e) { (void)e; _play_note(466); }  /* A#4 466 Hz */
+
 void memory_start(lv_event_t * e)
 {
-	// Your code here
+    (void) e;
+	setup_memory_ui();
 }
 
 void memory_back(lv_event_t * e)
 {
-	// Your code here
+    (void) e;
+	destroy_memory_ui();
 }
