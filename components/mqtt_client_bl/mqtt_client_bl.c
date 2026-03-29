@@ -12,6 +12,8 @@
 
 #include "mqtt_client.h"
 #include "esp_log.h"
+#include <string.h>
+#include <stdlib.h>
 
 //---------------------------------- MACROS -----------------------------------
 #define TAG "mqtt_client_bl"
@@ -19,6 +21,11 @@
 //------------------------- STATIC DATA & CONSTANTS ---------------------------
 static esp_mqtt_client_handle_t s_client      = NULL;
 static bool                     s_connected   = false;
+static mqtt_message_cb_t        s_message_cb  = NULL;
+
+/* Topic to auto-subscribe on (re)connect — set by mqtt_client_bl_subscribe(). */
+static char s_sub_topic[64] = {0};
+static int  s_sub_qos       = 0;
 
 //---------------------- PRIVATE FUNCTION PROTOTYPES --------------------------
 static void _mqtt_event_handler(void *handler_args, esp_event_base_t base,
@@ -79,6 +86,34 @@ esp_err_t mqtt_client_bl_publish(const char *topic, const char *payload,
     return ESP_OK;
 }
 
+esp_err_t mqtt_client_bl_subscribe(const char *topic, int qos)
+{
+    strncpy(s_sub_topic, topic, sizeof(s_sub_topic) - 1);
+    s_sub_topic[sizeof(s_sub_topic) - 1] = '\0';
+    s_sub_qos = qos;
+
+    if(!s_connected)
+    {
+        ESP_LOGW(TAG, "not connected — will subscribe to '%s' on reconnect", topic);
+        return ESP_OK;
+    }
+
+    int msg_id = esp_mqtt_client_subscribe(s_client, topic, qos);
+    if(msg_id < 0)
+    {
+        ESP_LOGE(TAG, "subscribe to '%s' failed", topic);
+        return ESP_FAIL;
+    }
+
+    ESP_LOGI(TAG, "subscribed to '%s' qos=%d", topic, qos);
+    return ESP_OK;
+}
+
+void mqtt_client_bl_set_message_cb(mqtt_message_cb_t cb)
+{
+    s_message_cb = cb;
+}
+
 bool mqtt_client_bl_is_connected(void)
 {
     return s_connected;
@@ -89,16 +124,47 @@ bool mqtt_client_bl_is_connected(void)
 static void _mqtt_event_handler(void *handler_args, esp_event_base_t base,
                                 int32_t event_id, void *event_data)
 {
+    esp_mqtt_event_handle_t event = (esp_mqtt_event_handle_t)event_data;
+
     switch((esp_mqtt_event_id_t)event_id)
     {
         case MQTT_EVENT_CONNECTED:
             s_connected = true;
             ESP_LOGI(TAG, "connected to broker");
+            /* Re-subscribe if a topic was registered. */
+            if(s_sub_topic[0] != '\0')
+            {
+                esp_mqtt_client_subscribe(s_client, s_sub_topic, s_sub_qos);
+                ESP_LOGI(TAG, "auto-subscribed to '%s'", s_sub_topic);
+            }
             break;
 
         case MQTT_EVENT_DISCONNECTED:
             s_connected = false;
             ESP_LOGW(TAG, "disconnected from broker");
+            break;
+
+        case MQTT_EVENT_DATA:
+            if(s_message_cb && event->data_len > 0)
+            {
+                /* Null-terminate topic and payload (MQTT data is not null-terminated). */
+                char *payload = malloc(event->data_len + 1);
+                if(payload)
+                {
+                    memcpy(payload, event->data, event->data_len);
+                    payload[event->data_len] = '\0';
+
+                    char *topic = malloc(event->topic_len + 1);
+                    if(topic)
+                    {
+                        memcpy(topic, event->topic, event->topic_len);
+                        topic[event->topic_len] = '\0';
+                        s_message_cb(topic, payload);
+                        free(topic);
+                    }
+                    free(payload);
+                }
+            }
             break;
 
         case MQTT_EVENT_ERROR:

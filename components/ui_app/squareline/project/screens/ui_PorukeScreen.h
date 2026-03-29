@@ -17,11 +17,13 @@ extern lv_obj_t * ui_PorukeScreen;
 extern lv_obj_t * ui_Keyboard1;
 extern void ui_event_BackButtonMsg(lv_event_t * e);
 extern lv_obj_t * ui_BackButtonMsg;
-// CUSTOM VARIABLES
+
+// Unread message counter — used by HomePage badge
+extern int  poruke_get_unread(void);
+extern void poruke_clear_unread(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
 
 #endif
-

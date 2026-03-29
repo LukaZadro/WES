@@ -4,6 +4,7 @@
 // Project name: esp32_gui
 
 #include "../ui.h"
+#include <stdio.h>
 
 lv_obj_t * ui_HomePage = NULL;
 lv_obj_t * ui_ColorSwitch = NULL;
@@ -18,6 +19,8 @@ lv_obj_t * ui_Image3 = NULL;
 lv_obj_t * ui_Image4 = NULL;
 lv_obj_t * ui_Image5 = NULL;
 lv_obj_t * ui_Image6 = NULL;
+lv_obj_t * ui_Image1 = NULL;
+lv_obj_t * ui_PorukeBadge = NULL;
 // event funtions
 void ui_event_ColorSwitch(lv_event_t * e)
 {
@@ -203,6 +206,28 @@ void ui_HomePage_screen_init(void)
     lv_obj_add_flag(ui_Image6, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_Image6, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
+    ui_Image1 = lv_img_create(ui_HomePage);
+    lv_img_set_src(ui_Image1, &ui_img_wp2844947_png);
+    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Image1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    /* Notification badge on the Poruke button */
+    ui_PorukeBadge = lv_obj_create(ui_Poruke);
+    lv_obj_set_size(ui_PorukeBadge, 20, 20);
+    lv_obj_align(ui_PorukeBadge, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_set_style_bg_color(ui_PorukeBadge, lv_color_hex(0xFF0000), 0);
+    lv_obj_set_style_radius(ui_PorukeBadge, 10, 0);
+    lv_obj_set_style_border_width(ui_PorukeBadge, 0, 0);
+    lv_obj_set_style_pad_all(ui_PorukeBadge, 0, 0);
+    lv_obj_clear_flag(ui_PorukeBadge, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_t *badge_lbl = lv_label_create(ui_PorukeBadge);
+    lv_obj_set_style_text_color(badge_lbl, lv_color_white(), 0);
+    lv_obj_center(badge_lbl);
+    ui_update_poruke_badge(poruke_get_unread());
+
     lv_obj_add_event_cb(ui_ColorSwitch, ui_event_ColorSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Poruke, ui_event_Poruke, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Memory, ui_event_Memory, LV_EVENT_ALL, NULL);
@@ -210,6 +235,22 @@ void ui_HomePage_screen_init(void)
     lv_obj_add_event_cb(ui_Tetris, ui_event_Tetris, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Klavijatura, ui_event_Klavijatura, LV_EVENT_ALL, NULL);
 
+}
+
+void ui_update_poruke_badge(int count)
+{
+    if(!ui_PorukeBadge) return;
+    if(count <= 0)
+    {
+        lv_obj_add_flag(ui_PorukeBadge, LV_OBJ_FLAG_HIDDEN);
+    }
+    else
+    {
+        char buf[8];
+        snprintf(buf, sizeof(buf), "%d", count > 99 ? 99 : count);
+        lv_label_set_text(lv_obj_get_child(ui_PorukeBadge, 0), buf);
+        lv_obj_clear_flag(ui_PorukeBadge, LV_OBJ_FLAG_HIDDEN);
+    }
 }
 
 void ui_HomePage_screen_destroy(void)
@@ -230,5 +271,7 @@ void ui_HomePage_screen_destroy(void)
     ui_Image4 = NULL;
     ui_Image5 = NULL;
     ui_Image6 = NULL;
+    ui_Image1 = NULL;
+    ui_PorukeBadge = NULL;
 
 }
